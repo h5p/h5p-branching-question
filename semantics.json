@@ -1,0 +1,81 @@
+[
+  {
+    "name": "question",
+    "type": "text",
+    "importance": "medium",
+    "widget": "html",
+    "label": "Question",
+    "enterMode": "p",
+    "tags": [
+      "strong",
+      "em",
+      "sub",
+      "sup",
+      "h2",
+      "h3"
+    ]
+  },
+  {
+    "name": "answers",
+    "type": "list",
+    "importance": "high",
+    "label": "Available options",
+    "entity": "option",
+    "min": 1,
+    "defaultNum": 2,
+    "field": {
+      "name": "answer",
+      "type": "group",
+      "label": "Option",
+      "importance": "high",
+      "fields": [
+        {
+          "name": "text",
+          "type": "text",
+          "importance": "medium",
+          "widget": "html",
+          "label": "Text",
+          "tags": [
+            "strong",
+            "em",
+            "sub",
+            "sup"
+          ]
+        },
+        {
+          "name": "nextContentId",
+          "type": "number",
+          "label": "Next Content (-1 is the end screen)",
+          "importance": "high"
+        }
+      ]
+    }
+  },
+  {
+    "name": "addFeedback",
+    "type": "boolean",
+    "label": "Add feedback",
+    "default": true
+  },
+  {
+    "name": "feedback",
+    "type": "group",
+    "label": "Feedback",
+    "fields": [
+      {
+        "name": "text",
+        "type": "text",
+        "label": "Feedback Text"
+      }
+    ],
+    "widget": "showWhen",
+    "showWhen": {
+      "rules": [
+        {
+          "field": "addFeedback",
+          "equals": true
+        }
+      ]
+    }
+  }
+]
