@@ -47,33 +47,33 @@
           "type": "number",
           "label": "Next Content (-1 is the end screen)",
           "importance": "high"
-        }
-      ]
-    }
-  },
-  {
-    "name": "addFeedback",
-    "type": "boolean",
-    "label": "Add feedback",
-    "default": true
-  },
-  {
-    "name": "feedback",
-    "type": "group",
-    "label": "Feedback",
-    "fields": [
-      {
-        "name": "text",
-        "type": "text",
-        "label": "Feedback Text"
-      }
-    ],
-    "widget": "showWhen",
-    "showWhen": {
-      "rules": [
+        },
         {
-          "field": "addFeedback",
-          "equals": true
+          "name": "addFeedback",
+          "type": "boolean",
+          "label": "Add feedback",
+          "default": false
+        },
+        {
+          "name": "feedback",
+          "type": "group",
+          "label": "Feedback",
+          "fields": [
+            {
+              "name": "text",
+              "type": "text",
+              "label": "Feedback Text"
+            }
+          ],
+          "widget": "showWhen",
+          "showWhen": {
+            "rules": [
+              {
+                "field": "addFeedback",
+                "equals": true
+              }
+            ]
+          }
         }
       ]
     }
