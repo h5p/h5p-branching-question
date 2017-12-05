@@ -1,0 +1,32 @@
+.h5p-branching-question {
+  background-color: #FFFFFF;
+  width: 80%;
+  min-height: 15em;
+  padding: 1em 2em 2em 2em;
+}
+
+.h5p-branching-question-title {
+  font-size: 1.5em;
+  font-weight: 300;
+  margin-left: 1.2em;
+}
+
+.h5p-branching-question-alternative {
+  background: #F1F1F1;
+  height: 2.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 1.250em;
+  padding-right: 1.250em;
+  margin: 0.5em;
+  border-radius: 6px;
+  border: solid 0.042em;
+  border-color: #cfcfd1;
+  cursor: pointer;
+}
+
+.h5p-branching-question-alternative::after {
+  font-family: 'H5PFontAwesome4';
+  content: '\f061';
+}

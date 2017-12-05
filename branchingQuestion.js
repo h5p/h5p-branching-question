@@ -6,27 +6,28 @@ H5P.BranchingQuestion = (function ($) {
 
     var createWrapper = function(parameters) {
       var wrapper = document.createElement('div');
+      wrapper.className = 'h5p-branching-question';
 
-      var title = document.createElement('p');
+      var title = document.createElement('h1');
+      title.className = 'h5p-branching-question-title';
       title.innerHTML = parameters.question;
+
       wrapper.append(title);
 
       return wrapper;
     }
 
     var appendMultiChoiceSection = function(parameters, wrapper) {
-      for (var i = 0; i < parameters.answers.length; i++) {
+      for (var i = 0; i < parameters.alternatives.length; i++) {
+        var alternative = createAlternativeContainer(parameters.alternatives[i].text);
+        alternative.nextContentId = parameters.alternatives[i].nextContentId;
 
-        var answer = document.createElement('ul');
-        answer.innerHTML = parameters.answers[i].text;
-        answer.nextContentId = parameters.answers[i].nextContentId;
-
-        // Create feedback screens if they exist // TODO: check for undefined
-        if (parameters.answers[i].addFeedback) {
-          answer.feedbackScreen = createFeedbackScreen(parameters.answers[i].feedback, answer.nextContentId);
+        // Create feedback screen if it exists // TODO: check for undefined
+        if (parameters.alternatives[i].addFeedback) {
+          alternative.feedbackScreen = createFeedbackScreen(parameters.alternatives[i].feedback, alternative.nextContentId);
         }
 
-        answer.onclick = function() {
+        alternative.onclick = function() {
           if (this.feedbackScreen !== undefined) {
             wrapper.append(this.feedbackScreen);
           }
@@ -35,8 +36,20 @@ H5P.BranchingQuestion = (function ($) {
           }
         };
 
-        wrapper.append(answer);
+        wrapper.append(alternative);
       }
+
+      return wrapper;
+    }
+
+    var createAlternativeContainer = function(text) {
+      var wrapper = document.createElement('div');
+      wrapper.classList.add('h5p-branching-question-alternative');
+
+      var alternativeText = document.createElement('p');
+      alternativeText.innerHTML = text;
+
+      wrapper.append(alternativeText);
 
       return wrapper;
     }
@@ -64,7 +77,8 @@ H5P.BranchingQuestion = (function ($) {
     self.attach = function ($container) {
       var wrapper = createWrapper(parameters);
       wrapper = appendMultiChoiceSection(parameters, wrapper);
-      $container.addClass('h5p-advanced-text').html(wrapper);
+      $container.append(wrapper);
+
     };
   }
 

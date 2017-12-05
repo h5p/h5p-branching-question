@@ -16,7 +16,7 @@
     ]
   },
   {
-    "name": "answers",
+    "name": "alternatives",
     "type": "list",
     "importance": "high",
     "label": "Available options",
@@ -24,7 +24,7 @@
     "min": 1,
     "defaultNum": 2,
     "field": {
-      "name": "answer",
+      "name": "alternative",
       "type": "group",
       "label": "Option",
       "importance": "high",
@@ -33,14 +33,7 @@
           "name": "text",
           "type": "text",
           "importance": "medium",
-          "widget": "html",
-          "label": "Text",
-          "tags": [
-            "strong",
-            "em",
-            "sub",
-            "sup"
-          ]
+          "label": "Text"
         },
         {
           "name": "nextContentId",
