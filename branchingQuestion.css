@@ -1,8 +1,13 @@
+.h5p-branching-question-container {
+  width: 100%;
+  position: relative;
+}
+
 .h5p-branching-question {
   background-color: #FFFFFF;
-  width: 80%;
-  min-height: 15em;
   padding: 1em 2em 2em 2em;
+  margin-left: 5em;
+  margin-right: 5em;
 }
 
 .h5p-branching-question-title {
@@ -17,8 +22,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 1.250em;
-  padding-right: 1.250em;
+  padding: 0.2em 1.250em 0.2em 1.250em;
   margin: 0.5em;
   border-radius: 6px;
   border: solid 0.042em;
@@ -29,4 +33,44 @@
 .h5p-branching-question-alternative::after {
   font-family: 'H5PFontAwesome4';
   content: '\f061';
+}
+
+.h5p-branching-question-icon {
+  position: absolute;
+  width: 150px;
+  height: auto;
+  top: -80px;
+  left: 10px;
+}
+
+.h5p-branching-question .h5p-feedback-default {
+  text-align: center;
+}
+
+.h5p-branching-question .h5p-feedback-has-image {
+  display: flex;
+  text-align: left;
+  padding-left: 0;
+  padding-bottom: 0;
+  margin-left: 0;
+}
+
+.h5p-branching-question .h5p-feedback-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 14.75em;
+  max-height: 16.667em;
+  padding: 0;
+  margin: 0;
+}
+
+.h5p-branching-question .h5p-feedback-image img {
+  width: 100%;
+}
+
+
+.h5p-branching-question .h5p-feedback-content {
+  padding-left: 1em;
+  margin-left: 1em;
 }

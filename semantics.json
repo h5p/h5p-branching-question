@@ -24,7 +24,7 @@
     "min": 1,
     "defaultNum": 2,
     "field": {
-      "name": "alternative",
+      "name": "answer",
       "type": "group",
       "label": "Option",
       "importance": "high",
@@ -53,9 +53,19 @@
           "label": "Feedback",
           "fields": [
             {
-              "name": "text",
+              "name": "title",
+              "type": "text",
+              "label": "Feedback Text Title"
+            },
+            {
+              "name": "subtitle",
               "type": "text",
               "label": "Feedback Text"
+            },
+            {
+              "name": "image",
+              "type": "image",
+              "label": "Feedback image"
             }
           ],
           "widget": "showWhen",

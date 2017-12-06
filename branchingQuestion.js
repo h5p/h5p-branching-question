@@ -12,23 +12,34 @@ H5P.BranchingQuestion = (function ($) {
       title.className = 'h5p-branching-question-title';
       title.innerHTML = parameters.question;
 
+      var icon = document.createElement('img');
+      icon.classList.add('h5p-branching-question-icon')
+      icon.src = self.getLibraryFilePath('branching-question-icon.svg');
+
+      wrapper.append(icon);
       wrapper.append(title);
+
 
       return wrapper;
     }
 
     var appendMultiChoiceSection = function(parameters, wrapper) {
+      console.log(parameters);
       for (var i = 0; i < parameters.alternatives.length; i++) {
         var alternative = createAlternativeContainer(parameters.alternatives[i].text);
         alternative.nextContentId = parameters.alternatives[i].nextContentId;
 
         // Create feedback screen if it exists // TODO: check for undefined
         if (parameters.alternatives[i].addFeedback) {
+
+          console.log(parameters.alternatives[i]);
+
           alternative.feedbackScreen = createFeedbackScreen(parameters.alternatives[i].feedback, alternative.nextContentId);
         }
 
         alternative.onclick = function() {
           if (this.feedbackScreen !== undefined) {
+            wrapper.innerHTML = '';
             wrapper.append(this.feedbackScreen);
           }
           else {
@@ -55,11 +66,33 @@ H5P.BranchingQuestion = (function ($) {
     }
 
     var createFeedbackScreen = function(feedback, nextContentId) {
-      var wrapper = document.createElement('div');
 
-      var title = document.createElement('p');
-      title.innerHTML = feedback;
-      wrapper.append(title);
+      var wrapper = document.createElement('div');
+      wrapper.classList.add('h5p-branching-question');
+      wrapper.classList.add(feedback.image !== undefined ? 'h5p-feedback-has-image' : 'h5p-feedback-default')
+
+      if (feedback.image !== undefined && feedback.image.path !== undefined) {
+        var imageContainer = document.createElement('div');
+        imageContainer.classList.add('h5p-branching-question');
+        imageContainer.classList.add('h5p-feedback-image');
+        var image = document.createElement('img');
+        image.src = H5P.getPath(feedback.image.path, self.contentId);
+        imageContainer.append(image);
+        wrapper.append(imageContainer);
+      }
+
+      var feedbackContent = document.createElement('div');
+      feedbackContent.classList.add('h5p-branching-question');
+      feedbackContent.classList.add('h5p-feedback-content');
+
+
+      var title = document.createElement('h1');
+      title.innerHTML = feedback.title;
+      feedbackContent.append(title);
+
+      var subTitle = document.createElement('h2');
+      subTitle.innerHTML = feedback.subtitle;
+      feedbackContent.append(subTitle);
 
       var navButton = document.createElement('button');
       navButton.onclick = function() {
@@ -69,16 +102,22 @@ H5P.BranchingQuestion = (function ($) {
       var text = document.createTextNode('Proceed'); // TODO: use translatable
       navButton.append(text);
 
-      wrapper.append(navButton);
+      feedbackContent.append(navButton);
+
+      wrapper.append(feedbackContent);
 
       return wrapper;
     }
 
     self.attach = function ($container) {
-      var wrapper = createWrapper(parameters);
-      wrapper = appendMultiChoiceSection(parameters, wrapper);
-      $container.append(wrapper);
+      var questionContainer = document.createElement('div');
+      questionContainer.classList.add('h5p-branching-question-container');
 
+      var branchingQuestion = createWrapper(parameters);
+      branchingQuestion = appendMultiChoiceSection(parameters, branchingQuestion);
+
+      questionContainer.append(branchingQuestion);
+      $container.append(questionContainer);
     };
   }
 
