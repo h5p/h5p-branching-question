@@ -5,20 +5,20 @@
 
 .h5p-branching-question {
   background-color: #FFFFFF;
-  padding: 1em 2em 2em 2em;
+  padding: 1em 0 2em 2em;
   margin-left: 5em;
   margin-right: 5em;
 }
 
 .h5p-branching-question-title {
-  font-size: 1.5em;
+  font-size: 1.1em;
   font-weight: 300;
   margin-left: 1.2em;
 }
 
 .h5p-branching-question-alternative {
   background: #F1F1F1;
-  height: 2.5em;
+  min-height: 2.5em;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -59,8 +59,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 14.75em;
-  max-height: 16.667em;
   padding: 0;
   margin: 0;
 }
