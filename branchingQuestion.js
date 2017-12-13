@@ -24,16 +24,12 @@ H5P.BranchingQuestion = (function ($) {
     }
 
     var appendMultiChoiceSection = function(parameters, wrapper) {
-      console.log(parameters);
       for (var i = 0; i < parameters.alternatives.length; i++) {
         var alternative = createAlternativeContainer(parameters.alternatives[i].text);
         alternative.nextContentId = parameters.alternatives[i].nextContentId;
 
-        // Create feedback screen if it exists // TODO: check for undefined
+        // Create feedback screen if it exists 
         if (parameters.alternatives[i].addFeedback) {
-
-          console.log(parameters.alternatives[i]);
-
           alternative.feedbackScreen = createFeedbackScreen(parameters.alternatives[i].feedback, alternative.nextContentId);
         }
 
@@ -99,7 +95,7 @@ H5P.BranchingQuestion = (function ($) {
         self.trigger('navigated', nextContentId);
       };
 
-      var text = document.createTextNode('Proceed'); // TODO: use translatable
+      var text = document.createTextNode(parameters.proceedButtonText);
       navButton.append(text);
 
       feedbackContent.append(navButton);
@@ -123,4 +119,4 @@ H5P.BranchingQuestion = (function ($) {
 
   return BranchingQuestion;
 
-})(H5P.jQuery, H5P.EventDispatcher);
+})();

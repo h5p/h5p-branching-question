@@ -5,9 +5,7 @@
 
 .h5p-branching-question {
   background-color: #FFFFFF;
-  padding: 1em 0 2em 2em;
-  margin-left: 5em;
-  margin-right: 5em;
+  padding: 1em 2em 2em 2em;
 }
 
 .h5p-branching-question-title {
@@ -50,8 +48,7 @@
 .h5p-branching-question .h5p-feedback-has-image {
   display: flex;
   text-align: left;
-  padding-left: 0;
-  padding-bottom: 0;
+  padding: 0;
   margin-left: 0;
 }
 
@@ -61,6 +58,7 @@
   justify-content: center;
   padding: 0;
   margin: 0;
+  max-width: 30%;
 }
 
 .h5p-branching-question .h5p-feedback-image img {
@@ -71,4 +69,8 @@
 .h5p-branching-question .h5p-feedback-content {
   padding-left: 1em;
   margin-left: 1em;
+}
+
+.h5p-branching-question .h5p-feedback-content h2 {
+  font-size: 1em;
 }
