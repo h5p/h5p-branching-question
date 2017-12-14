@@ -28,10 +28,16 @@ H5P.BranchingQuestion = (function ($) {
         var alternative = createAlternativeContainer(parameters.alternatives[i].text);
         alternative.nextContentId = parameters.alternatives[i].nextContentId;
 
-        // Create feedback screen if it exists 
+        // Create feedback screen if it exists
         if (parameters.alternatives[i].addFeedback) {
           alternative.feedbackScreen = createFeedbackScreen(parameters.alternatives[i].feedback, alternative.nextContentId);
         }
+
+        alternative.addEventListener('keydown', function(event) {
+          if (event.which == 13 || event.which == 32) {
+            this.click();
+          }
+        });
 
         alternative.onclick = function() {
           if (this.feedbackScreen !== undefined) {
@@ -52,12 +58,12 @@ H5P.BranchingQuestion = (function ($) {
     var createAlternativeContainer = function(text) {
       var wrapper = document.createElement('div');
       wrapper.classList.add('h5p-branching-question-alternative');
+      wrapper.tabIndex = 0;
 
       var alternativeText = document.createElement('p');
       alternativeText.innerHTML = text;
 
       wrapper.append(alternativeText);
-
       return wrapper;
     }
 
