@@ -1,0 +1,44 @@
+{
+  "semantics": [
+    {
+      "label": "Question"
+    },
+    {
+      "label": "Available options",
+      "entity": "option",
+      "field": {
+        "label": "Option",
+        "fields": [
+          {
+            "label": "Text"
+          },
+          {
+            "label": "Next Content (-1 is the end screen)"
+          },
+          {
+            "label": "Add feedback"
+          },
+          {
+            "label": "Feedback",
+            "fields": [
+              {
+                "label": "Feedback Text Title"
+              },
+              {
+                "label": "Feedback Text"
+              },
+              {
+                "label": "Feedback image"
+              }
+            ],
+            "showWhen": {
+              "rules": [
+                {}
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
