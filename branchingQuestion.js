@@ -19,7 +19,6 @@ H5P.BranchingQuestion = (function ($) {
       wrapper.append(icon);
       wrapper.append(title);
 
-
       return wrapper;
     }
 
@@ -43,6 +42,7 @@ H5P.BranchingQuestion = (function ($) {
           if (this.feedbackScreen !== undefined) {
             wrapper.innerHTML = '';
             wrapper.append(this.feedbackScreen);
+            self.triggerXAPI('interacted');
           }
           else {
             self.trigger('navigated', this.nextContentId);
