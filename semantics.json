@@ -60,12 +60,14 @@
             {
               "name": "subtitle",
               "type": "text",
-              "label": "Feedback Text"
+              "label": "Feedback Text",
+              "optional": true
             },
             {
               "name": "image",
               "type": "image",
-              "label": "Feedback image"
+              "label": "Feedback image",
+              "optional": true
             }
           ],
           "widget": "showWhen",
