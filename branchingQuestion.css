@@ -1,6 +1,6 @@
 .h5p-branching-question-container {
-  width: 100%;
-  position: relative;
+  width: 80%;
+  position: absolute;
 }
 
 .h5p-branching-question {
@@ -12,6 +12,12 @@
   font-size: 1.1em;
   font-weight: 300;
   margin-left: 1.2em;
+}
+
+.h5p-alternative-wrapper {
+  height: 80%;
+  overflow-y: scroll;
+  overflow-x: none;
 }
 
 .h5p-branching-question-alternative {

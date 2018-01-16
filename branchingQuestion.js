@@ -6,10 +6,10 @@ H5P.BranchingQuestion = (function ($) {
 
     var createWrapper = function(parameters) {
       var wrapper = document.createElement('div');
-      wrapper.className = 'h5p-branching-question';
+      wrapper.classList.add('h5p-branching-question');
 
       var title = document.createElement('h1');
-      title.className = 'h5p-branching-question-title';
+      title.classList.add('h5p-branching-question-title');
       title.innerHTML = parameters.question;
 
       var icon = document.createElement('img');
@@ -23,6 +23,10 @@ H5P.BranchingQuestion = (function ($) {
     }
 
     var appendMultiChoiceSection = function(parameters, wrapper) {
+
+      var alternativeWrapper = document.createElement('div');
+      alternativeWrapper.classList.add('h5p-alternative-wrapper');
+
       for (var i = 0; i < parameters.alternatives.length; i++) {
         var alternative = createAlternativeContainer(parameters.alternatives[i].text);
         alternative.nextContentId = parameters.alternatives[i].nextContentId;
@@ -32,7 +36,7 @@ H5P.BranchingQuestion = (function ($) {
           alternative.feedbackScreen = createFeedbackScreen(parameters.alternatives[i].feedback, alternative.nextContentId);
         }
 
-        alternative.addEventListener('keydown', function(event) {
+        alternative.addEventListener('keyup', function(event) {
           if (event.which == 13 || event.which == 32) {
             this.click();
           }
@@ -48,10 +52,10 @@ H5P.BranchingQuestion = (function ($) {
             self.trigger('navigated', this.nextContentId);
           }
         };
-
-        wrapper.append(alternative);
+        alternativeWrapper.append(alternative);
       }
 
+      wrapper.append(alternativeWrapper);
       return wrapper;
     }
 
@@ -93,7 +97,7 @@ H5P.BranchingQuestion = (function ($) {
       feedbackContent.append(title);
 
       var subTitle = document.createElement('h2');
-      subTitle.innerHTML = feedback.subtitle;
+      subTitle.innerHTML = feedback.subtitle ? feedback.subTitle : '';
       feedbackContent.append(subTitle);
 
       var navButton = document.createElement('button');
