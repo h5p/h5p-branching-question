@@ -2,6 +2,9 @@ H5P.BranchingQuestion = (function ($) {
 
   function BranchingQuestion(parameters, id) {
     var self = this;
+    self.feedbackButton;
+    self.firstFocusable;
+    self.lastFocusable;
     H5P.EventDispatcher.call(self);
 
     var createWrapper = function(parameters) {
@@ -29,11 +32,21 @@ H5P.BranchingQuestion = (function ($) {
 
       for (var i = 0; i < parameters.alternatives.length; i++) {
         var alternative = createAlternativeContainer(parameters.alternatives[i].text);
+
+        if (i === 0) {
+          self.firstFocusable = alternative;
+        }
+
+        if (i === parameters.alternatives.length - 1) {
+          self.lastFocusable = alternative;
+        }
+
         alternative.nextContentId = parameters.alternatives[i].nextContentId;
 
         // Create feedback screen if it exists
         if (parameters.alternatives[i].addFeedback) {
           alternative.feedbackScreen = createFeedbackScreen(parameters.alternatives[i].feedback, alternative.nextContentId);
+          alternative.proceedButton = alternative.feedbackScreen.querySelectorAll('button')[0];
         }
 
         alternative.addEventListener('keyup', function(event) {
@@ -47,6 +60,7 @@ H5P.BranchingQuestion = (function ($) {
             wrapper.innerHTML = '';
             wrapper.append(this.feedbackScreen);
             self.triggerXAPI('interacted');
+            this.proceedButton.focus();
           }
           else {
             self.trigger('navigated', this.nextContentId);
@@ -91,7 +105,6 @@ H5P.BranchingQuestion = (function ($) {
       feedbackContent.classList.add('h5p-branching-question');
       feedbackContent.classList.add('h5p-feedback-content');
 
-
       var title = document.createElement('h1');
       title.innerHTML = feedback.title;
       feedbackContent.append(title);
@@ -110,9 +123,43 @@ H5P.BranchingQuestion = (function ($) {
 
       feedbackContent.append(navButton);
 
+      KEYCODE_TAB = 9;
+      feedbackContent.addEventListener('keydown', function(e) {
+        var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
+        if (isTabPressed) {
+          e.preventDefault();
+          return;
+        }
+      })
+
       wrapper.append(feedbackContent);
 
       return wrapper;
+    }
+
+    //https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
+    var trapFocus = function(element) {
+      KEYCODE_TAB = 9;
+
+      element.addEventListener('keydown', function(e) {
+        var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
+
+        if (!isTabPressed) {
+            return;
+        }
+
+        if ( e.shiftKey ) /* shift + tab */ {
+            if (document.activeElement === self.firstFocusable) {
+                self.lastFocusable.focus();
+                e.preventDefault();
+            }
+        } else /* tab */ {
+            if (document.activeElement === self.lastFocusable) {
+                self.firstFocusable.focus();
+                e.preventDefault();
+            }
+        }
+      })
     }
 
     self.attach = function ($container) {
@@ -121,6 +168,7 @@ H5P.BranchingQuestion = (function ($) {
 
       var branchingQuestion = createWrapper(parameters);
       branchingQuestion = appendMultiChoiceSection(parameters, branchingQuestion);
+      trapFocus(branchingQuestion);
 
       questionContainer.append(branchingQuestion);
       $container.append(questionContainer);

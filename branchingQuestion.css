@@ -15,8 +15,8 @@
 }
 
 .h5p-alternative-wrapper {
-  height: 80%;
-  overflow-y: scroll;
+  max-height: 80%;
+  overflow-y: auto;
   overflow-x: none;
 }
 
