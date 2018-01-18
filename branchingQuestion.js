@@ -7,28 +7,28 @@ H5P.BranchingQuestion = (function ($) {
     self.lastFocusable;
     H5P.EventDispatcher.call(self);
 
-    var createWrapper = function(parameters) {
+    var createWrapper = function() {
       var wrapper = document.createElement('div');
       wrapper.classList.add('h5p-branching-question');
 
-      var title = document.createElement('h1');
-      title.classList.add('h5p-branching-question-title');
-      title.innerHTML = parameters.question;
-
       var icon = document.createElement('img');
-      icon.classList.add('h5p-branching-question-icon')
+      icon.classList.add('h5p-branching-question-icon');
       icon.src = self.getLibraryFilePath('branching-question-icon.svg');
 
       wrapper.append(icon);
-      wrapper.append(title);
 
       return wrapper;
-    }
+    };
 
     var appendMultiChoiceSection = function(parameters, wrapper) {
+      var questionWrapper = document.createElement('div');
+      questionWrapper.classList.add('h5p-multichoice-wrapper');
 
-      var alternativeWrapper = document.createElement('div');
-      alternativeWrapper.classList.add('h5p-alternative-wrapper');
+      var title = document.createElement('div');
+      title.classList.add('h5p-branching-question-title');
+      title.innerHTML = parameters.question;
+
+      questionWrapper.append(title);
 
       for (var i = 0; i < parameters.alternatives.length; i++) {
         var alternative = createAlternativeContainer(parameters.alternatives[i].text);
@@ -60,18 +60,18 @@ H5P.BranchingQuestion = (function ($) {
             wrapper.innerHTML = '';
             wrapper.append(this.feedbackScreen);
             self.triggerXAPI('interacted');
-            this.proceedButton.focus();
+            // this.proceedButton.focus();
           }
           else {
             self.trigger('navigated', this.nextContentId);
           }
         };
-        alternativeWrapper.append(alternative);
+        questionWrapper.append(alternative);
       }
 
-      wrapper.append(alternativeWrapper);
+      wrapper.append(questionWrapper);
       return wrapper;
-    }
+    };
 
     var createAlternativeContainer = function(text) {
       var wrapper = document.createElement('div');
@@ -83,13 +83,13 @@ H5P.BranchingQuestion = (function ($) {
 
       wrapper.append(alternativeText);
       return wrapper;
-    }
+    };
 
     var createFeedbackScreen = function(feedback, nextContentId) {
 
       var wrapper = document.createElement('div');
       wrapper.classList.add('h5p-branching-question');
-      wrapper.classList.add(feedback.image !== undefined ? 'h5p-feedback-has-image' : 'h5p-feedback-default')
+      wrapper.classList.add(feedback.image !== undefined ? 'h5p-feedback-has-image' : 'h5p-feedback-default');
 
       if (feedback.image !== undefined && feedback.image.path !== undefined) {
         var imageContainer = document.createElement('div');
@@ -109,9 +109,11 @@ H5P.BranchingQuestion = (function ($) {
       title.innerHTML = feedback.title;
       feedbackContent.append(title);
 
-      var subTitle = document.createElement('h2');
-      subTitle.innerHTML = feedback.subtitle ? feedback.subTitle : '';
-      feedbackContent.append(subTitle);
+      if (feedback.subtitle) {
+        var subtitle = document.createElement('h2');
+        subtitle.innerHTML = feedback.subtitle;
+        feedbackContent.append(subtitle);
+      }
 
       var navButton = document.createElement('button');
       navButton.onclick = function() {
@@ -123,44 +125,43 @@ H5P.BranchingQuestion = (function ($) {
 
       feedbackContent.append(navButton);
 
-      KEYCODE_TAB = 9;
+      var KEYCODE_TAB = 9;
       feedbackContent.addEventListener('keydown', function(e) {
         var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
         if (isTabPressed) {
           e.preventDefault();
           return;
         }
-      })
+      });
 
       wrapper.append(feedbackContent);
 
       return wrapper;
-    }
+    };
 
     //https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
     var trapFocus = function(element) {
-      KEYCODE_TAB = 9;
-
+      var KEYCODE_TAB = 9;
       element.addEventListener('keydown', function(e) {
         var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
 
         if (!isTabPressed) {
-            return;
+          return;
         }
 
         if ( e.shiftKey ) /* shift + tab */ {
-            if (document.activeElement === self.firstFocusable) {
-                self.lastFocusable.focus();
-                e.preventDefault();
-            }
+          if (document.activeElement === self.firstFocusable) {
+            self.lastFocusable.focus();
+            e.preventDefault();
+          }
         } else /* tab */ {
-            if (document.activeElement === self.lastFocusable) {
-                self.firstFocusable.focus();
-                e.preventDefault();
-            }
+          if (document.activeElement === self.lastFocusable) {
+            self.firstFocusable.focus();
+            e.preventDefault();
+          }
         }
-      })
-    }
+      });
+    };
 
     self.attach = function ($container) {
       var questionContainer = document.createElement('div');
