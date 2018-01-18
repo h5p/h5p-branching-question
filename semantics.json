@@ -38,7 +38,7 @@
         {
           "name": "nextContentId",
           "type": "number",
-          "label": "Next Content (-1 is the end screen)",
+          "label": "Next Content ID (end screens are defined by negative numbers)",
           "importance": "high"
         },
         {
