@@ -2,7 +2,6 @@ H5P.BranchingQuestion = (function ($) {
 
   function BranchingQuestion(parameters, id) {
     var self = this;
-    self.feedbackButton;
     self.firstFocusable;
     self.lastFocusable;
     H5P.EventDispatcher.call(self);
@@ -59,8 +58,8 @@ H5P.BranchingQuestion = (function ($) {
           if (this.feedbackScreen !== undefined) {
             wrapper.innerHTML = '';
             wrapper.append(this.feedbackScreen);
+            this.proceedButton.focus();
             self.triggerXAPI('interacted');
-            // this.proceedButton.focus();
           }
           else {
             self.trigger('navigated', this.nextContentId);
@@ -149,16 +148,13 @@ H5P.BranchingQuestion = (function ($) {
           return;
         }
 
-        if ( e.shiftKey ) /* shift + tab */ {
-          if (document.activeElement === self.firstFocusable) {
-            self.lastFocusable.focus();
-            e.preventDefault();
-          }
-        } else /* tab */ {
-          if (document.activeElement === self.lastFocusable) {
-            self.firstFocusable.focus();
-            e.preventDefault();
-          }
+        if (e.shiftKey && document.activeElement === self.firstFocusable) /* shift + tab */ {
+          self.lastFocusable.focus();
+          e.preventDefault();
+        }
+        else if (document.activeElement === self.lastFocusable) { /* tab */
+          self.firstFocusable.focus();
+          e.preventDefault();
         }
       });
     };
