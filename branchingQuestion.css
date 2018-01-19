@@ -74,6 +74,10 @@
   text-align: center;
 }
 
+.h5p-branching-question .h5p-feedback-default h1 {
+  line-height: 1em;
+}
+
 .h5p-branching-question .h5p-feedback-has-image {
   display: flex;
   text-align: left;

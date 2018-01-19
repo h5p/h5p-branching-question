@@ -1,4 +1,4 @@
-H5P.BranchingQuestion = (function ($) {
+H5P.BranchingQuestion = (function () {
 
   function BranchingQuestion(parameters, id) {
     var self = this;
