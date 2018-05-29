@@ -1,0 +1,44 @@
+{
+  "semantics": [
+    {
+      "label": "Vraag"
+    },
+    {
+      "label": "Beschikbare opties",
+      "entity": "optie",
+      "field": {
+        "label": "Optie",
+        "fields": [
+          {
+            "label": "Tekst"
+          },
+          {
+            "label": "Volgende inhoud (-1 is schermeinde)"
+          },
+          {
+            "label": "Voeg feedback toe"
+          },
+          {
+            "label": "Feedback",
+            "fields": [
+              {
+                "label": "Titel feedback tekst"
+              },
+              {
+                "label": "Feedback tekst"
+              },
+              {
+                "label": "Feedback afbeelding"
+              }
+            ],
+            "showWhen": {
+              "rules": [
+                {}
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
