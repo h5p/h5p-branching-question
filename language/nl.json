@@ -1,44 +1,49 @@
 {
   "semantics": [
     {
-      "label": "Vraag"
-    },
-    {
-      "label": "Beschikbare opties",
-      "entity": "optie",
-      "field": {
-        "label": "Optie",
-        "fields": [
-          {
-            "label": "Tekst"
-          },
-          {
-            "label": "Volgende inhoud (-1 is schermeinde)"
-          },
-          {
-            "label": "Voeg feedback toe"
-          },
-          {
-            "label": "Feedback",
+      "label": "Branching Question Editor",
+      "fields": [
+        {
+          "label": "Vraag"
+        },
+        {
+          "label": "Beschikbare opties",
+          "entity": "optie",
+          "field": {
+            "label": "Optie",
             "fields": [
               {
-                "label": "Titel feedback tekst"
+                "label": "Tekst"
               },
               {
-                "label": "Feedback tekst"
+                "label": "Volgende inhoud (-1 is schermeinde)"
               },
               {
-                "label": "Feedback afbeelding"
+                "label": "Voeg feedback toe"
+              },
+              {
+                "label": "Feedback",
+                "fields": [
+                  {
+                    "label": "Titel feedback tekst"
+                  },
+                  {
+                    "label": "Feedback tekst"
+                  },
+                  {
+                    "label": "Feedback afbeelding"
+                  }
+                ],
+                "showWhen": {
+                  "rules": [
+                    {}
+                  ]
+                }
               }
-            ],
-            "showWhen": {
-              "rules": [
-                {}
-              ]
-            }
+            ]
           }
-        ]
-      }
+        }
+      ]
     }
   ]
 }

@@ -1,86 +1,95 @@
 [
   {
-    "name": "question",
-    "type": "text",
-    "importance": "medium",
-    "widget": "html",
-    "label": "Question",
-    "enterMode": "p",
-    "tags": [
-      "strong",
-      "em",
-      "sub",
-      "sup",
-      "h2",
-      "h3"
-    ]
-  },
-  {
-    "name": "alternatives",
-    "type": "list",
+    "name": "branchingQuestion",
+    "type": "group",
+    "widget": "branchingQuestion",
+    "label": "Branching Question Editor",
     "importance": "high",
-    "label": "Available options",
-    "entity": "option",
-    "min": 1,
-    "defaultNum": 2,
-    "field": {
-      "name": "answer",
-      "type": "group",
-      "label": "Option",
-      "importance": "high",
-      "fields": [
-        {
-          "name": "text",
-          "type": "text",
-          "importance": "medium",
-          "label": "Text"
-        },
-        {
-          "name": "nextContentId",
-          "type": "number",
-          "label": "Next Content ID (end screens are defined by negative numbers)",
-          "importance": "high"
-        },
-        {
-          "name": "addFeedback",
-          "type": "boolean",
-          "label": "Add feedback",
-          "default": false
-        },
-        {
-          "name": "feedback",
+    "fields": [
+      {
+        "name": "question",
+        "type": "text",
+        "importance": "medium",
+        "widget": "html",
+        "label": "Question",
+        "enterMode": "p",
+        "tags": [
+          "strong",
+          "em",
+          "sub",
+          "sup",
+          "h2",
+          "h3"
+        ]
+      },
+      {
+        "name": "alternatives",
+        "type": "list",
+        "importance": "high",
+        "label": "Available options",
+        "entity": "option",
+        "min": 1,
+        "defaultNum": 2,
+        "field": {
+          "name": "answer",
           "type": "group",
-          "label": "Feedback",
+          "label": "Option",
+          "importance": "high",
           "fields": [
             {
-              "name": "title",
+              "name": "text",
               "type": "text",
-              "label": "Feedback Text Title"
+              "importance": "medium",
+              "label": "Text"
             },
             {
-              "name": "subtitle",
-              "type": "text",
-              "label": "Feedback Text",
-              "optional": true
+              "name": "nextContentId",
+              "type": "number",
+              "label": "Next Content ID (end screens are defined by negative numbers)",
+              "importance": "high"
             },
             {
-              "name": "image",
-              "type": "image",
-              "label": "Feedback image",
-              "optional": true
-            }
-          ],
-          "widget": "showWhen",
-          "showWhen": {
-            "rules": [
-              {
-                "field": "addFeedback",
-                "equals": true
+              "name": "addFeedback",
+              "type": "boolean",
+              "label": "Add feedback",
+              "default": false
+            },
+            {
+              "name": "feedback",
+              "type": "group",
+              "label": "Feedback",
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "text",
+                  "label": "Feedback Text Title"
+                },
+                {
+                  "name": "subtitle",
+                  "type": "text",
+                  "label": "Feedback Text",
+                  "optional": true
+                },
+                {
+                  "name": "image",
+                  "type": "image",
+                  "label": "Feedback image",
+                  "optional": true
+                }
+              ],
+              "widget": "showWhen",
+              "showWhen": {
+                "rules": [
+                  {
+                    "field": "addFeedback",
+                    "equals": true
+                  }
+                ]
               }
-            ]
-          }
+            }
+          ]
         }
-      ]
-    }
+      }
+    ]
   }
 ]

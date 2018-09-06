@@ -25,26 +25,26 @@ H5P.BranchingQuestion = (function () {
 
       var title = document.createElement('div');
       title.classList.add('h5p-branching-question-title');
-      title.innerHTML = parameters.question;
+      title.innerHTML = parameters.branchingQuestion.question;
 
       questionWrapper.append(title);
 
-      for (var i = 0; i < parameters.alternatives.length; i++) {
-        var alternative = createAlternativeContainer(parameters.alternatives[i].text);
+      for (var i = 0; i < parameters.branchingQuestion.alternatives.length; i++) {
+        var alternative = createAlternativeContainer(parameters.branchingQuestion.alternatives[i].text);
 
         if (i === 0) {
           self.firstFocusable = alternative;
         }
 
-        if (i === parameters.alternatives.length - 1) {
+        if (i === parameters.branchingQuestion.alternatives.length - 1) {
           self.lastFocusable = alternative;
         }
 
-        alternative.nextContentId = parameters.alternatives[i].nextContentId;
+        alternative.nextContentId = parameters.branchingQuestion.alternatives[i].nextContentId;
 
         // Create feedback screen if it exists
-        if (parameters.alternatives[i].addFeedback) {
-          alternative.feedbackScreen = createFeedbackScreen(parameters.alternatives[i].feedback, alternative.nextContentId);
+        if (parameters.branchingQuestion.alternatives[i].addFeedback) {
+          alternative.feedbackScreen = createFeedbackScreen(parameters.branchingQuestion.alternatives[i].feedback, alternative.nextContentId);
           alternative.proceedButton = alternative.feedbackScreen.querySelectorAll('button')[0];
         }
 
@@ -119,7 +119,7 @@ H5P.BranchingQuestion = (function () {
         self.trigger('navigated', nextContentId);
       };
 
-      var text = document.createTextNode(parameters.proceedButtonText);
+      var text = document.createTextNode(parameters.branchingQuestion.proceedButtonText);
       navButton.append(text);
 
       feedbackContent.append(navButton);
