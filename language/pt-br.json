@@ -1,44 +1,49 @@
 {
   "semantics": [
     {
-      "label": "Questão"
-    },
-    {
-      "label": "Opções disponíveis",
-      "entity": "option",
-      "field": {
-        "label": "Opção",
-        "fields": [
-          {
-            "label": "Texto"
-          },
-          {
-            "label": "Próximo conteúdo (-1 é a tela final)"
-          },
-          {
-            "label": "Adicionar feedback"
-          },
-          {
-            "label": "Feedback",
+      "label": "Branching Question Editor",
+      "fields": [
+        {
+          "label": "Questão"
+        },
+        {
+          "label": "Opções disponíveis",
+          "entity": "option",
+          "field": {
+            "label": "Opção",
             "fields": [
               {
-                "label": "Título textual do Feedback"
+                "label": "Texto"
               },
               {
-                "label": "Texto do feedback"
+                "label": "Próximo conteúdo (-1 é a tela final)"
               },
               {
-                "label": "Imagem do feedback"
+                "label": "Adicionar feedback"
+              },
+              {
+                "label": "Feedback",
+                "fields": [
+                  {
+                    "label": "Título textual do Feedback"
+                  },
+                  {
+                    "label": "Texto do feedback"
+                  },
+                  {
+                    "label": "Imagem do feedback"
+                  }
+                ],
+                "showWhen": {
+                  "rules": [
+                    {}
+                  ]
+                }
               }
-            ],
-            "showWhen": {
-              "rules": [
-                {}
-              ]
-            }
+            ]
           }
-        ]
-      }
+        }
+      ]
     }
   ]
 }
