@@ -28,7 +28,7 @@
         "importance": "high",
         "label": "Available options",
         "entity": "option",
-        "min": 1,
+        "min": 2,
         "defaultNum": 2,
         "field": {
           "name": "answer",
