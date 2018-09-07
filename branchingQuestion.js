@@ -43,10 +43,14 @@ H5P.BranchingQuestion = (function () {
         alternative.nextContentId = parameters.branchingQuestion.alternatives[i].nextContentId;
 
         // Create feedback screen if it exists
-        if (parameters.branchingQuestion.alternatives[i].addFeedback) {
+        var hasFeedbackScreen = parameters.branchingQuestion.alternatives[i].addFeedback
+          && parameters.branchingQuestion.alternatives[i].nextContentId !== -1;
+        if (hasFeedbackScreen) {
           alternative.feedbackScreen = createFeedbackScreen(parameters.branchingQuestion.alternatives[i].feedback, alternative.nextContentId);
           alternative.proceedButton = alternative.feedbackScreen.querySelectorAll('button')[0];
         }
+        alternative.addFeedback = parameters.branchingQuestion.alternatives[i].addFeedback;
+        alternative.feedback = parameters.branchingQuestion.alternatives[i].feedback;
 
         alternative.addEventListener('keyup', function(event) {
           if (event.which == 13 || event.which == 32) {
@@ -54,7 +58,7 @@ H5P.BranchingQuestion = (function () {
           }
         });
 
-        alternative.onclick = function() {
+        alternative.onclick = function(e) {
           if (this.feedbackScreen !== undefined) {
             wrapper.innerHTML = '';
             wrapper.append(this.feedbackScreen);
@@ -62,7 +66,23 @@ H5P.BranchingQuestion = (function () {
             self.triggerXAPI('interacted');
           }
           else {
-            self.trigger('navigated', this.nextContentId);
+            var nextScreen = {
+              nextContentId: this.nextContentId
+            };
+
+            var alts = e.target.parentNode.querySelectorAll('.h5p-branching-question-alternative');
+            var index;
+            for (var i = 0; i < alts.length; i++) {
+              if (alts[i] === e.target) {
+                index = i;
+                break;
+              }
+            }
+
+            if (index && parameters.branchingQuestion.alternatives[index].addFeedback) {
+              nextScreen.feedback = parameters.branchingQuestion.alternatives[index].feedback;
+            }
+            self.trigger('navigated', nextScreen);
           }
         };
         questionWrapper.append(alternative);
@@ -116,7 +136,9 @@ H5P.BranchingQuestion = (function () {
 
       var navButton = document.createElement('button');
       navButton.onclick = function() {
-        self.trigger('navigated', nextContentId);
+        self.trigger('navigated', {
+          nextContentId
+        });
       };
 
       var text = document.createTextNode(parameters.branchingQuestion.proceedButtonText);
