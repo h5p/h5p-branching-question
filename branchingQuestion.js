@@ -70,10 +70,12 @@ H5P.BranchingQuestion = (function () {
               nextContentId: this.nextContentId
             };
 
-            var alts = e.target.parentNode.querySelectorAll('.h5p-branching-question-alternative');
+            var currentAlt = e.target.classList.contains('.h5p-branching-question-alternative') ?
+              e.target : e.target.closest('.h5p-branching-question-alternative');
+            var alts = questionWrapper.querySelectorAll('.h5p-branching-question-alternative');
             var index;
             for (var i = 0; i < alts.length; i++) {
-              if (alts[i] === e.target) {
+              if (alts[i] === currentAlt) {
                 index = i;
                 break;
               }
