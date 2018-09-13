@@ -75,6 +75,13 @@
                   "type": "image",
                   "label": "Feedback image",
                   "optional": true
+                },
+                {
+                  "name": "endScreenScore",
+                  "type": "number",
+                  "label": "Score for this scenario",
+                  "description": "The number of points that will be given for ending up with this scenario",
+                  "default": 0
                 }
               ],
               "widget": "showWhen",
