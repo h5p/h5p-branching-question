@@ -83,6 +83,13 @@
             }
           ]
         }
+      },
+      {
+        "name": "proceedButtonLabel",
+        "label": "Proceed button label",
+        "type": "text",
+        "default": "Proceed",
+        "common": true
       }
     ]
   }
