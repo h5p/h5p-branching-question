@@ -143,7 +143,7 @@ H5P.BranchingQuestion = (function () {
         });
       };
 
-      var text = document.createTextNode(parameters.branchingQuestion.proceedButtonText);
+      var text = document.createTextNode(parameters.proceedButtonText);
       navButton.append(text);
 
       feedbackContent.append(navButton);
