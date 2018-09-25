@@ -1,12 +1,12 @@
 H5P.BranchingQuestion = (function () {
 
-  function BranchingQuestion(parameters, id) {
+  function BranchingQuestion(parameters) {
     var self = this;
     self.firstFocusable;
     self.lastFocusable;
     H5P.EventDispatcher.call(self);
 
-    var createWrapper = function() {
+    var createWrapper = function () {
       var wrapper = document.createElement('div');
       wrapper.classList.add('h5p-branching-question');
 
@@ -19,7 +19,7 @@ H5P.BranchingQuestion = (function () {
       return wrapper;
     };
 
-    var appendMultiChoiceSection = function(parameters, wrapper) {
+    var appendMultiChoiceSection = function (parameters, wrapper) {
       var questionWrapper = document.createElement('div');
       questionWrapper.classList.add('h5p-multichoice-wrapper');
 
@@ -43,22 +43,25 @@ H5P.BranchingQuestion = (function () {
         alternative.nextContentId = parameters.branchingQuestion.alternatives[i].nextContentId;
 
         // Create feedback screen if it exists
-        var hasFeedbackScreen = parameters.branchingQuestion.alternatives[i].addFeedback
-          && parameters.branchingQuestion.alternatives[i].nextContentId !== -1;
-        if (hasFeedbackScreen) {
-          alternative.feedbackScreen = createFeedbackScreen(parameters.branchingQuestion.alternatives[i].feedback, alternative.nextContentId);
+
+        const altParams = parameters.branchingQuestion.alternatives[i];
+        const hasFeedback = !!(altParams.feedback.title
+          || altParams.feedback.subtitle
+          || altParams.feedback.image);
+        if (hasFeedback && altParams.nextContentId !== -1) {
+          alternative.feedbackScreen = createFeedbackScreen(altParams.feedback, alternative.nextContentId);
           alternative.proceedButton = alternative.feedbackScreen.querySelectorAll('button')[0];
         }
-        alternative.addFeedback = parameters.branchingQuestion.alternatives[i].addFeedback;
-        alternative.feedback = parameters.branchingQuestion.alternatives[i].feedback;
+        alternative.hasFeedback = hasFeedback;
+        alternative.feedback = altParams.feedback;
 
-        alternative.addEventListener('keyup', function(event) {
+        alternative.addEventListener('keyup', function (event) {
           if (event.which == 13 || event.which == 32) {
             this.click();
           }
         });
 
-        alternative.onclick = function(e) {
+        alternative.onclick = function (e) {
           if (this.feedbackScreen !== undefined) {
             wrapper.innerHTML = '';
             wrapper.append(this.feedbackScreen);
@@ -81,8 +84,13 @@ H5P.BranchingQuestion = (function () {
               }
             }
 
-            if (index && parameters.branchingQuestion.alternatives[index].addFeedback) {
-              nextScreen.feedback = parameters.branchingQuestion.alternatives[index].feedback;
+            const currentAltParams = parameters.branchingQuestion.alternatives[index];
+            const currentAltHasFeedback = !!(currentAltParams.feedback.title
+              || currentAltParams.feedback.subtitle
+              || currentAltParams.feedback.image);
+
+            if (index >= 0 && currentAltHasFeedback) {
+              nextScreen.feedback = currentAltParams.feedback;
             }
             self.trigger('navigated', nextScreen);
           }
@@ -94,7 +102,7 @@ H5P.BranchingQuestion = (function () {
       return wrapper;
     };
 
-    var createAlternativeContainer = function(text) {
+    var createAlternativeContainer = function (text) {
       var wrapper = document.createElement('div');
       wrapper.classList.add('h5p-branching-question-alternative');
       wrapper.tabIndex = 0;
@@ -106,7 +114,7 @@ H5P.BranchingQuestion = (function () {
       return wrapper;
     };
 
-    var createFeedbackScreen = function(feedback, nextContentId) {
+    var createFeedbackScreen = function (feedback, nextContentId) {
 
       var wrapper = document.createElement('div');
       wrapper.classList.add('h5p-branching-question');
@@ -127,17 +135,17 @@ H5P.BranchingQuestion = (function () {
       feedbackContent.classList.add('h5p-feedback-content');
 
       var title = document.createElement('h1');
-      title.innerHTML = feedback.title;
+      title.innerHTML = feedback.title || '';
       feedbackContent.append(title);
 
       if (feedback.subtitle) {
         var subtitle = document.createElement('h2');
-        subtitle.innerHTML = feedback.subtitle;
+        subtitle.innerHTML = feedback.subtitle || '';
         feedbackContent.append(subtitle);
       }
 
       var navButton = document.createElement('button');
-      navButton.onclick = function() {
+      navButton.onclick = function () {
         self.trigger('navigated', {
           nextContentId
         });
@@ -149,7 +157,7 @@ H5P.BranchingQuestion = (function () {
       feedbackContent.append(navButton);
 
       var KEYCODE_TAB = 9;
-      feedbackContent.addEventListener('keydown', function(e) {
+      feedbackContent.addEventListener('keydown', function (e) {
         var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
         if (isTabPressed) {
           e.preventDefault();
@@ -163,9 +171,9 @@ H5P.BranchingQuestion = (function () {
     };
 
     //https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
-    var trapFocus = function(element) {
+    var trapFocus = function (element) {
       var KEYCODE_TAB = 9;
-      element.addEventListener('keydown', function(e) {
+      element.addEventListener('keydown', function (e) {
         var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
 
         if (!isTabPressed) {

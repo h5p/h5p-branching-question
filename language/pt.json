@@ -19,9 +19,6 @@
                 "label": "Próximo conteúdo (-1 é a tela final)"
               },
               {
-                "label": "Adicionar feedback"
-              },
-              {
                 "label": "Feedback",
                 "fields": [
                   {
@@ -33,12 +30,7 @@
                   {
                     "label": "Imagem do feedback"
                   }
-                ],
-                "showWhen": {
-                  "rules": [
-                    {}
-                  ]
-                }
+                ]
               }
             ]
           }
