@@ -26,14 +26,14 @@
         "name": "alternatives",
         "type": "list",
         "importance": "high",
-        "label": "Available options",
-        "entity": "option",
+        "label": "Available alternatives",
+        "entity": "alternative",
         "min": 2,
         "defaultNum": 2,
         "field": {
           "name": "answer",
           "type": "group",
-          "label": "Option",
+          "label": "Alternative",
           "importance": "high",
           "fields": [
             {
