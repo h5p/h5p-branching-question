@@ -19,9 +19,6 @@
                 "label": "Next Content (-1 is the end screen)"
               },
               {
-                "label": "Add feedback"
-              },
-              {
                 "label": "Feedback",
                 "fields": [
                   {
@@ -33,12 +30,7 @@
                   {
                     "label": "Feedback image"
                   }
-                ],
-                "showWhen": {
-                  "rules": [
-                    {}
-                  ]
-                }
+                ]
               }
             ]
           }

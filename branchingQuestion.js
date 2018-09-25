@@ -43,14 +43,17 @@ H5P.BranchingQuestion = (function () {
         alternative.nextContentId = parameters.branchingQuestion.alternatives[i].nextContentId;
 
         // Create feedback screen if it exists
-        var hasFeedbackScreen = parameters.branchingQuestion.alternatives[i].addFeedback
-          && parameters.branchingQuestion.alternatives[i].nextContentId !== -1;
-        if (hasFeedbackScreen) {
-          alternative.feedbackScreen = createFeedbackScreen(parameters.branchingQuestion.alternatives[i].feedback, alternative.nextContentId);
+
+        const altParams = parameters.branchingQuestion.alternatives[i];
+        const hasFeedback = !!(altParams.feedback.title
+          || altParams.feedback.subtitle
+          || altParams.feedback.image);
+        if (hasFeedback && altParams.nextContentId !== -1) {
+          alternative.feedbackScreen = createFeedbackScreen(altParams.feedback, alternative.nextContentId);
           alternative.proceedButton = alternative.feedbackScreen.querySelectorAll('button')[0];
         }
-        alternative.addFeedback = parameters.branchingQuestion.alternatives[i].addFeedback;
-        alternative.feedback = parameters.branchingQuestion.alternatives[i].feedback;
+        alternative.hasFeedback = hasFeedback;
+        alternative.feedback = altParams.feedback;
 
         alternative.addEventListener('keyup', function(event) {
           if (event.which == 13 || event.which == 32) {
@@ -81,8 +84,13 @@ H5P.BranchingQuestion = (function () {
               }
             }
 
-            if (index && parameters.branchingQuestion.alternatives[index].addFeedback) {
-              nextScreen.feedback = parameters.branchingQuestion.alternatives[index].feedback;
+            const currentAltParams = parameters.branchingQuestion.alternatives[index];
+            const currentAltHasFeedback = !!(currentAltParams.feedback.title
+              || currentAltParams.feedback.subtitle
+              || currentAltParams.feedback.image);
+
+            if (index >= 0 && currentAltHasFeedback) {
+              nextScreen.feedback = currentAltParams.feedback;
             }
             self.trigger('navigated', nextScreen);
           }
@@ -127,12 +135,12 @@ H5P.BranchingQuestion = (function () {
       feedbackContent.classList.add('h5p-feedback-content');
 
       var title = document.createElement('h1');
-      title.innerHTML = feedback.title;
+      title.innerHTML = feedback.title || '';
       feedbackContent.append(title);
 
       if (feedback.subtitle) {
         var subtitle = document.createElement('h2');
-        subtitle.innerHTML = feedback.subtitle;
+        subtitle.innerHTML = feedback.subtitle || '';
         feedbackContent.append(subtitle);
       }
 

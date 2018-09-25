@@ -19,9 +19,6 @@
                 "label": "Volgende inhoud (-1 is schermeinde)"
               },
               {
-                "label": "Voeg feedback toe"
-              },
-              {
                 "label": "Feedback",
                 "fields": [
                   {
@@ -33,12 +30,7 @@
                   {
                     "label": "Feedback afbeelding"
                   }
-                ],
-                "showWhen": {
-                  "rules": [
-                    {}
-                  ]
-                }
+                ]
               }
             ]
           }
