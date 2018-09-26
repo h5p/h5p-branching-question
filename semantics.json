@@ -56,13 +56,13 @@
                 {
                   "name": "title",
                   "type": "text",
-                  "label": "Feedback Text Title",
+                  "label": "Feedback title",
                   "optional": true
                 },
                 {
                   "name": "subtitle",
                   "type": "text",
-                  "label": "Feedback Text",
+                  "label": "Feedback text",
                   "optional": true
                 },
                 {
@@ -75,7 +75,7 @@
                   "name": "endScreenScore",
                   "type": "number",
                   "label": "Score for this scenario",
-                  "description": "The number of points that will be given for ending up with this scenario",
+                  "description": "The score will be sent to any LMS, LRS or any other connected service that receives scores from H5P for users who reach this default end scenario screen",
                   "optional": true
                 }
               ]

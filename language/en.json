@@ -22,10 +22,10 @@
                 "label": "Feedback",
                 "fields": [
                   {
-                    "label": "Feedback Text Title"
+                    "label": "Feedback title"
                   },
                   {
-                    "label": "Feedback Text"
+                    "label": "Feedback text"
                   },
                   {
                     "label": "Feedback image"
