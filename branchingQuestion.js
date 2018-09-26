@@ -52,7 +52,7 @@ H5P.BranchingQuestion = (function () {
           alternative.feedbackScreen = createFeedbackScreen(altParams.feedback, alternative.nextContentId);
           alternative.proceedButton = alternative.feedbackScreen.querySelectorAll('button')[0];
         }
-        alternative.hasFeedback = hasFeedback;
+        alternative.hasFeedback = !!(hasFeedback || (altParams.feedback.endScreenScore !== undefined));
         alternative.feedback = altParams.feedback;
 
         alternative.addEventListener('keyup', function (event) {
@@ -87,7 +87,9 @@ H5P.BranchingQuestion = (function () {
             const currentAltParams = parameters.branchingQuestion.alternatives[index];
             const currentAltHasFeedback = !!(currentAltParams.feedback.title
               || currentAltParams.feedback.subtitle
-              || currentAltParams.feedback.image);
+              || currentAltParams.feedback.image
+              || currentAltParams.feedback.endScreenScore !== undefined
+            );
 
             if (index >= 0 && currentAltHasFeedback) {
               nextScreen.feedback = currentAltParams.feedback;
