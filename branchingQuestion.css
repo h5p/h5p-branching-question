@@ -1,15 +1,21 @@
 .h5p-branching-question-container {
   max-height: 74%;
-  /* max-width: 90%; */
-  padding-top: 5em;
   transition: height 2s;
+  padding-top: 5em;
   display: flex;
+  overflow: auto;
+}
+
+.h5p-branching-scenario-feedback-dialog .h5p-branching-question-container {
+  padding: 0;
 }
 
 .h5p-branching-question {
   background-color: #FFFFFF;
   padding: 1em;
   display: flex;
+  margin: auto;
+  position: relative;
 }
 
 .h5p-multichoice-wrapper {
