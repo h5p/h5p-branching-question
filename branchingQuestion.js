@@ -5,6 +5,7 @@ H5P.BranchingQuestion = (function () {
     self.firstFocusable;
     self.lastFocusable;
     H5P.EventDispatcher.call(self);
+    this.container = null;
 
     var createWrapper = function () {
       var wrapper = document.createElement('div');
@@ -63,6 +64,9 @@ H5P.BranchingQuestion = (function () {
 
         alternative.onclick = function (e) {
           if (this.feedbackScreen !== undefined) {
+            if (self.container) {
+              self.container.classList.add('h5p-branching-scenario-feedback-dialog');
+            }
             wrapper.innerHTML = '';
             wrapper.append(this.feedbackScreen);
             this.proceedButton.focus();
@@ -203,6 +207,7 @@ H5P.BranchingQuestion = (function () {
 
       questionContainer.append(branchingQuestion);
       $container.append(questionContainer);
+      this.container = $container[0];
     };
   }
 
