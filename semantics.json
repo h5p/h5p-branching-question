@@ -46,7 +46,8 @@
               "name": "nextContentId",
               "type": "number",
               "label": "Next Content ID (end screens are defined by negative numbers)",
-              "importance": "high"
+              "importance": "high",
+              "default": -1
             },
             {
               "name": "feedback",
