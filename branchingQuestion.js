@@ -160,7 +160,7 @@ H5P.BranchingQuestion = (function () {
       navButton.onclick = function () {
         self.trigger('navigated', {
           nextContentId,
-          chosenAlternativeIndex
+          chosenAlternative: chosenAlternativeIndex
         });
       };
 
