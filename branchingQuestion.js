@@ -50,7 +50,11 @@ H5P.BranchingQuestion = (function () {
           || altParams.feedback.subtitle
           || altParams.feedback.image);
         if (hasFeedback && altParams.nextContentId !== -1) {
-          alternative.feedbackScreen = createFeedbackScreen(altParams.feedback, alternative.nextContentId);
+          alternative.feedbackScreen = createFeedbackScreen(
+            altParams.feedback,
+            alternative.nextContentId,
+            i
+          );
           alternative.proceedButton = alternative.feedbackScreen.querySelectorAll('button')[0];
         }
         alternative.hasFeedback = !!(hasFeedback || (altParams.feedback.endScreenScore !== undefined));
@@ -73,9 +77,6 @@ H5P.BranchingQuestion = (function () {
             self.triggerXAPI('interacted');
           }
           else {
-            var nextScreen = {
-              nextContentId: this.nextContentId
-            };
 
             var currentAlt = e.target.classList.contains('.h5p-branching-question-alternative') ?
               e.target : e.target.closest('.h5p-branching-question-alternative');
@@ -87,6 +88,11 @@ H5P.BranchingQuestion = (function () {
                 break;
               }
             }
+
+            var nextScreen = {
+              nextContentId: this.nextContentId,
+              chosenAlternative: index,
+            };
 
             const currentAltParams = parameters.branchingQuestion.alternatives[index];
             const currentAltHasFeedback = !!(currentAltParams.feedback.title
@@ -120,7 +126,7 @@ H5P.BranchingQuestion = (function () {
       return wrapper;
     };
 
-    var createFeedbackScreen = function (feedback, nextContentId) {
+    var createFeedbackScreen = function (feedback, nextContentId, chosenAlternativeIndex) {
 
       var wrapper = document.createElement('div');
       wrapper.classList.add('h5p-branching-question');
@@ -153,7 +159,8 @@ H5P.BranchingQuestion = (function () {
       var navButton = document.createElement('button');
       navButton.onclick = function () {
         self.trigger('navigated', {
-          nextContentId
+          nextContentId,
+          chosenAlternativeIndex
         });
       };
 
