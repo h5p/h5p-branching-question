@@ -36,12 +36,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.2em 1.250em 0.2em 1.250em;
+  padding: 0.2em 2.5em 0.2em 1.250em;
   margin: 0.5em;
   border-radius: 6px;
   border: solid 0.042em;
   border-color: #cfcfd1;
   cursor: pointer;
+  word-break: break-word;
 }
 
 .h5p-branching-question-alternative:hover {
