@@ -1,5 +1,4 @@
 .h5p-branching-question-container {
-  max-height: 74%;
   transition: height 2s;
   padding-top: 5em;
   display: flex;
