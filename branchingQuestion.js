@@ -20,11 +20,11 @@ H5P.BranchingQuestion = (function () {
       if (!document.documentElement.contains(element)) {
         return null;
       }
+      if (!element.matches) {
+        element.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+      }
 
       do {
-        if (!element.matches) {
-          element.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
-        }
         if (element.matches(selector)) {
           return element;
         }
