@@ -39,7 +39,7 @@ H5P.BranchingQuestion = (function () {
       icon.classList.add('h5p-branching-question-icon');
       icon.src = self.getLibraryFilePath('branching-question-icon.svg');
 
-      wrapper.append(icon);
+      wrapper.appendChild(icon);
 
       return wrapper;
     };
@@ -52,7 +52,7 @@ H5P.BranchingQuestion = (function () {
       title.classList.add('h5p-branching-question-title');
       title.innerHTML = parameters.branchingQuestion.question;
 
-      questionWrapper.append(title);
+      questionWrapper.appendChild(title);
 
       for (var i = 0; i < parameters.branchingQuestion.alternatives.length; i++) {
         var alternative = createAlternativeContainer(parameters.branchingQuestion.alternatives[i].text);
@@ -96,7 +96,7 @@ H5P.BranchingQuestion = (function () {
               self.container.classList.add('h5p-branching-scenario-feedback-dialog');
             }
             wrapper.innerHTML = '';
-            wrapper.append(this.feedbackScreen);
+            wrapper.appendChild(this.feedbackScreen);
             this.proceedButton.focus();
             self.triggerXAPI('interacted');
           }
@@ -131,10 +131,10 @@ H5P.BranchingQuestion = (function () {
             self.trigger('navigated', nextScreen);
           }
         };
-        questionWrapper.append(alternative);
+        questionWrapper.appendChild(alternative);
       }
 
-      wrapper.append(questionWrapper);
+      wrapper.appendChild(questionWrapper);
       return wrapper;
     };
 
@@ -146,7 +146,7 @@ H5P.BranchingQuestion = (function () {
       var alternativeText = document.createElement('p');
       alternativeText.innerHTML = text;
 
-      wrapper.append(alternativeText);
+      wrapper.appendChild(alternativeText);
       return wrapper;
     };
 
@@ -162,8 +162,8 @@ H5P.BranchingQuestion = (function () {
         imageContainer.classList.add('h5p-feedback-image');
         var image = document.createElement('img');
         image.src = H5P.getPath(feedback.image.path, self.contentId);
-        imageContainer.append(image);
-        wrapper.append(imageContainer);
+        imageContainer.appendChild(image);
+        wrapper.appendChild(imageContainer);
       }
 
       var feedbackContent = document.createElement('div');
@@ -172,12 +172,12 @@ H5P.BranchingQuestion = (function () {
 
       var title = document.createElement('h1');
       title.innerHTML = feedback.title || '';
-      feedbackContent.append(title);
+      feedbackContent.appendChild(title);
 
       if (feedback.subtitle) {
         var subtitle = document.createElement('h2');
         subtitle.innerHTML = feedback.subtitle || '';
-        feedbackContent.append(subtitle);
+        feedbackContent.appendChild(subtitle);
       }
 
       var navButton = document.createElement('button');
@@ -189,9 +189,9 @@ H5P.BranchingQuestion = (function () {
       };
 
       var text = document.createTextNode(parameters.proceedButtonText);
-      navButton.append(text);
+      navButton.appendChild(text);
 
-      feedbackContent.append(navButton);
+      feedbackContent.appendChild(navButton);
 
       var KEYCODE_TAB = 9;
       feedbackContent.addEventListener('keydown', function (e) {
@@ -202,7 +202,7 @@ H5P.BranchingQuestion = (function () {
         }
       });
 
-      wrapper.append(feedbackContent);
+      wrapper.appendChild(feedbackContent);
 
       return wrapper;
     };
@@ -236,7 +236,7 @@ H5P.BranchingQuestion = (function () {
       branchingQuestion = appendMultiChoiceSection(parameters, branchingQuestion);
       trapFocus(branchingQuestion);
 
-      questionContainer.append(branchingQuestion);
+      questionContainer.appendChild(branchingQuestion);
       $container.append(questionContainer);
       this.container = $container[0];
     };
