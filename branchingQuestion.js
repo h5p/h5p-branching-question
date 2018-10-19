@@ -7,6 +7,30 @@ H5P.BranchingQuestion = (function () {
     H5P.EventDispatcher.call(self);
     this.container = null;
 
+    /**
+     * Get closest ancestor of DOM element that matches selector.
+     *
+     * Mimics Element.closest(), workaround for IE11.
+     *
+     * @param {Element} element DOM element.
+     * @param {string} selector CSS selector.
+     * @return {Element|null} Element, if found. Else null.
+     */
+    const getClosestParent = function (element, selector) {
+      if (!document.documentElement.contains(element)) {
+        return null;
+      }
+
+      do {
+        if (element.matches(selector)) {
+          return element;
+        }
+        element = element.parentElement || element.parentNode;
+      }
+      while (element !== null && element.nodeType === 1);
+      return null;
+    };
+
     var createWrapper = function () {
       var wrapper = document.createElement('div');
       wrapper.classList.add('h5p-branching-question');
@@ -79,7 +103,7 @@ H5P.BranchingQuestion = (function () {
           else {
 
             var currentAlt = e.target.classList.contains('.h5p-branching-question-alternative') ?
-              e.target : e.target.closest('.h5p-branching-question-alternative');
+              e.target : getClosestParent(e.target, '.h5p-branching-question-alternative');
             var alts = questionWrapper.querySelectorAll('.h5p-branching-question-alternative');
             var index;
             for (var i = 0; i < alts.length; i++) {
