@@ -22,6 +22,9 @@ H5P.BranchingQuestion = (function () {
       }
 
       do {
+        if (!element.matches) {
+          element.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+        }
         if (element.matches(selector)) {
           return element;
         }
