@@ -57,22 +57,21 @@ H5P.BranchingQuestion = (function () {
 
       questionWrapper.appendChild(title);
 
-      for (var i = 0; i < parameters.branchingQuestion.alternatives.length; i++) {
-        var alternative = createAlternativeContainer(parameters.branchingQuestion.alternatives[i].text);
+      const alternatives = parameters.branchingQuestion.alternatives || [] ;
+      alternatives.forEach(function (altParams, index, array) {
+        const alternative = createAlternativeContainer(altParams.text);
 
-        if (i === 0) {
+        if (index === 0) {
           self.firstFocusable = alternative;
         }
 
-        if (i === parameters.branchingQuestion.alternatives.length - 1) {
+        if (index === array.length - 1) {
           self.lastFocusable = alternative;
         }
 
-        alternative.nextContentId = parameters.branchingQuestion.alternatives[i].nextContentId;
+        alternative.nextContentId = altParams.nextContentId;
 
         // Create feedback screen if it exists
-
-        const altParams = parameters.branchingQuestion.alternatives[i];
         const hasFeedback = !!(altParams.feedback.title
           || altParams.feedback.subtitle
           || altParams.feedback.image);
@@ -80,7 +79,7 @@ H5P.BranchingQuestion = (function () {
           alternative.feedbackScreen = createFeedbackScreen(
             altParams.feedback,
             alternative.nextContentId,
-            i
+            index
           );
           alternative.proceedButton = alternative.feedbackScreen.querySelectorAll('button')[0];
         }
@@ -135,7 +134,7 @@ H5P.BranchingQuestion = (function () {
           }
         };
         questionWrapper.appendChild(alternative);
-      }
+      });
 
       wrapper.appendChild(questionWrapper);
       return wrapper;
