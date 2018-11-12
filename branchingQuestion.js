@@ -72,9 +72,10 @@ H5P.BranchingQuestion = (function () {
         alternative.nextContentId = altParams.nextContentId;
 
         // Create feedback screen if it exists
-        const hasFeedback = !!(altParams.feedback.title
-          || altParams.feedback.subtitle
-          || altParams.feedback.image);
+        const hasFeedback = !!(altParams.feedback &&
+          (altParams.feedback.title ||
+            altParams.feedback.subtitle ||
+            altParams.feedback.image));
         if (hasFeedback && altParams.nextContentId !== -1) {
           alternative.feedbackScreen = createFeedbackScreen(
             altParams.feedback,
@@ -83,7 +84,7 @@ H5P.BranchingQuestion = (function () {
           );
           alternative.proceedButton = alternative.feedbackScreen.querySelectorAll('button')[0];
         }
-        alternative.hasFeedback = !!(hasFeedback || (altParams.feedback.endScreenScore !== undefined));
+        alternative.hasFeedback = !!(hasFeedback || (altParams.feedback && altParams.feedback.endScreenScore !== undefined));
         alternative.feedback = altParams.feedback;
 
         alternative.addEventListener('keyup', function (event) {
