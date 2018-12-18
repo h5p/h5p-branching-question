@@ -72,9 +72,11 @@ H5P.BranchingQuestion = (function () {
         alternative.nextContentId = altParams.nextContentId;
 
         // Create feedback screen if it exists
-        const hasFeedback = altParams.feedback && !!(altParams.feedback.title ||
-            altParams.feedback.subtitle ||
-            altParams.feedback.image);
+        const hasFeedback = altParams.feedback && !!(
+          altParams.feedback.title && altParams.feedback.title.trim() ||
+          altParams.feedback.subtitle && altParams.feedback.subtitle.trim() ||
+          altParams.feedback.image
+        );
         if (hasFeedback && altParams.nextContentId !== -1) {
           alternative.feedbackScreen = createFeedbackScreen(
             altParams.feedback,
