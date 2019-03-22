@@ -6,6 +6,7 @@ H5P.BranchingQuestion = (function () {
     self.lastFocusable;
     H5P.EventDispatcher.call(self);
     this.container = null;
+    let answered;
 
     /**
      * Get closest ancestor of DOM element that matches selector.
@@ -101,6 +102,7 @@ H5P.BranchingQuestion = (function () {
             }
             wrapper.innerHTML = '';
             wrapper.appendChild(this.feedbackScreen);
+            answered = index;
             this.proceedButton.focus();
             self.triggerXAPI('interacted');
           }
@@ -109,27 +111,28 @@ H5P.BranchingQuestion = (function () {
             var currentAlt = e.target.classList.contains('.h5p-branching-question-alternative') ?
               e.target : getClosestParent(e.target, '.h5p-branching-question-alternative');
             var alts = questionWrapper.querySelectorAll('.h5p-branching-question-alternative');
-            var index;
+            var index2;
             for (var i = 0; i < alts.length; i++) {
               if (alts[i] === currentAlt) {
-                index = i;
+                index2 = i;
                 break;
               }
             }
+            answered = index2;
 
             var nextScreen = {
               nextContentId: this.nextContentId,
-              chosenAlternative: index,
+              chosenAlternative: index2,
             };
 
-            const currentAltParams = parameters.branchingQuestion.alternatives[index];
+            const currentAltParams = parameters.branchingQuestion.alternatives[index2];
             const currentAltHasFeedback = !!(currentAltParams.feedback.title
               || currentAltParams.feedback.subtitle
               || currentAltParams.feedback.image
               || currentAltParams.feedback.endScreenScore !== undefined
             );
 
-            if (index >= 0 && currentAltHasFeedback) {
+            if (index2 >= 0 && currentAltHasFeedback) {
               nextScreen.feedback = currentAltParams.feedback;
             }
             self.trigger('navigated', nextScreen);
@@ -236,6 +239,55 @@ H5P.BranchingQuestion = (function () {
       });
     };
 
+    /**
+     * Get xAPI data.
+     * Contract used by report rendering engine.
+     *
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-6}
+     */
+    self.getXAPIData = function () {
+      var xAPIEvent = this.createXAPIEventTemplate('answered');
+      addQuestionToXAPI(xAPIEvent);
+      xAPIEvent.setScoredResult(undefined, undefined, self, true);
+      xAPIEvent.data.statement.result.response = answered;
+      return {
+        statement: xAPIEvent.data.statement
+      };
+    };
+
+    /**
+     * Add the question to the given xAPIEvent
+     *
+     * @param {H5P.XAPIEvent} xAPIEvent
+     */
+    var addQuestionToXAPI = function (xAPIEvent) {
+      const converter = document.createElement('div');
+
+      var definition = xAPIEvent.getVerifiedStatementValue(['object', 'definition']);
+      converter.innerHTML = parameters.branchingQuestion.question
+      definition.description = {
+        'en-US': converter.innerText
+      };
+      definition.type = 'http://adlnet.gov/expapi/activities/cmi.interaction';
+      definition.interactionType = 'choice';
+      definition.correctResponsesPattern = [];
+      definition.choices = [];
+
+      const alternatives = parameters.branchingQuestion.alternatives;
+      for (let i = 0; i < alternatives.length; i++) {
+        converter.innerHTML = alternatives[i].text
+        definition.choices[i] = {
+          'id': i + '',
+          'description': {
+            'en-US': converter.innerText
+          }
+        };
+      }
+    };
+
+    /**
+     * TODO
+     */
     self.attach = function ($container) {
       var questionContainer = document.createElement('div');
       questionContainer.classList.add('h5p-branching-question-container');
