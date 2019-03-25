@@ -272,6 +272,9 @@ H5P.BranchingQuestion = (function () {
       definition.interactionType = 'choice';
       definition.correctResponsesPattern = [];
       definition.choices = [];
+      definition.extensions = {
+        'https://h5p.org/x-api/no-correct-answer': 1
+      };
 
       const alternatives = parameters.branchingQuestion.alternatives;
       for (let i = 0; i < alternatives.length; i++) {
