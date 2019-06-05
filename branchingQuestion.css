@@ -116,3 +116,11 @@
 .h5p-branching-question .h5p-feedback-content h2 {
   font-size: 1em;
 }
+
+.h5p-branching-question-alternative-back {
+  margin-top: 1.5em;
+}
+
+.h5p-branching-question-alternative-back:after {
+  content: '\f060';
+}
