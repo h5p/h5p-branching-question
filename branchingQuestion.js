@@ -90,7 +90,7 @@ H5P.BranchingQuestion = (function () {
         alternative.feedback = altParams.feedback;
 
         alternative.addEventListener('keyup', function (event) {
-          if (event.which == 13 || event.which == 32) {
+          if (event.which === 13 || event.which === 32) {
             this.click();
           }
         });
@@ -264,7 +264,7 @@ H5P.BranchingQuestion = (function () {
       const converter = document.createElement('div');
 
       var definition = xAPIEvent.getVerifiedStatementValue(['object', 'definition']);
-      converter.innerHTML = parameters.branchingQuestion.question
+      converter.innerHTML = parameters.branchingQuestion.question;
       definition.description = {
         'en-US': converter.innerText
       };
@@ -278,7 +278,7 @@ H5P.BranchingQuestion = (function () {
 
       const alternatives = parameters.branchingQuestion.alternatives;
       for (let i = 0; i < alternatives.length; i++) {
-        converter.innerHTML = alternatives[i].text
+        converter.innerHTML = alternatives[i].text;
         definition.choices[i] = {
           'id': i + '',
           'description': {
