@@ -142,7 +142,8 @@ H5P.BranchingQuestion = (function () {
       });
 
       // Add alternative to go back
-      if (self.parent.params.behaviour === true && self.parent.userPath.length > 1) {
+      const currentId = self.parent.getUserPath().slice(-1)[0] || -1;
+      if (currentId >= 0 && self.parent.canEnableBackButton(currentId) === true && self.parent.getUserPath().length > 1) {
         const alternativeBack = self.createAlternativeBackContainer(self.parent.params.l10n.backButtonText);
         questionWrapper.appendChild(alternativeBack);
       }
