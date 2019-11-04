@@ -19,7 +19,9 @@
           "sub",
           "sup",
           "h2",
-          "h3"
+          "h3",
+          "pre",
+          "code"
         ]
       },
       {
@@ -70,7 +72,8 @@
                   "tags": [
                     "strong",
                     "em",
-                    "del"
+                    "del",
+                    "code"
                   ]
                 },
                 {
