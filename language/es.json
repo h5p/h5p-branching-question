@@ -8,12 +8,12 @@
         },
         {
           "label": "Alternativas disponibles",
-          "entity": "alternative",
+          "entity": "alternativa",
           "field": {
-            "label": "Alternative",
+            "label": "Alternativa",
             "fields": [
               {
-                "label": "Text"
+                "label": "Texto"
               },
               {
                 "label": "Contenido Siguiente (-1 es pantalla final)"
