@@ -1,34 +1,34 @@
 {
   "semantics": [
     {
-      "label": "Editor de Pregunta Ramificada",
+      "label": "Editor větvení otázek",
       "fields": [
         {
-          "label": "Pregunta"
+          "label": "Otázka"
         },
         {
-          "label": "Alternativas disponibles",
+          "label": "Dostupné alternativy",
           "entity": "alternativa",
           "field": {
             "label": "Alternativa",
             "fields": [
               {
-                "label": "Texto"
+                "label": "Text"
               },
               {
-                "label": "Contenido Siguiente (-1 es pantalla final)"
+                "label": "Další obsah(-1 je poslední obrazovka)"
               },
               {
-                "label": "Retroalimentación",
+                "label": "Zpětná vazba",
                 "fields": [
                   {
-                    "label": "Título de Retroalimentación"
+                    "label": "Nadpis Zpětné vazby"
                   },
                   {
-                    "label": "Texto de Retroalimentación"
+                    "label": "Text Zpětné vazby"
                   },
                   {
-                    "label": "Imagen de Retroalimentación"
+                    "label": "Obrázek Zpětné vazby"
                   }
                 ]
               }
