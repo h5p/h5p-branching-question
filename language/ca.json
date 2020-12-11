@@ -1,0 +1,41 @@
+{
+  "semantics": [
+    {
+      "label": "Branching Question Editor",
+      "fields": [
+        {
+          "label": "Pregunta"
+        },
+        {
+          "label": "Alternatives disponibles",
+          "entity": "alternativa",
+          "field": {
+            "label": "Alternativa",
+            "fields": [
+              {
+                "label": "Text"
+              },
+              {
+                "label": "Contingut següent (-1 és la pantalla final)"
+              },
+              {
+                "label": "Suggeriments",
+                "fields": [
+                  {
+                    "label": "Títols dels suggeriments"
+                  },
+                  {
+                    "label": "Text dels suggeriments quan no s’han creat objectius."
+                  },
+                  {
+                    "label": "Imatge de suggeriments"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
