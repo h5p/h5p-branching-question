@@ -55,12 +55,21 @@
               "name": "feedback",
               "type": "group",
               "label": "Feedback",
+              "expanded": true,
               "fields": [
                 {
                   "name": "title",
                   "type": "text",
                   "label": "Feedback title",
-                  "optional": true
+                  "optional": true,
+                  "widget": "html",
+                  "enterMode": "p",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "del",
+                    "code"
+                  ]
                 },
                 {
                   "name": "subtitle",
