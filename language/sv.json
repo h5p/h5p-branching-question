@@ -1,34 +1,34 @@
 {
   "semantics": [
     {
-      "label": "Editor perguntas com ramificação",
+      "label": "Redigerare för Branching Question",
       "fields": [
         {
-          "label": "Pergunta"
+          "label": "Fråga"
         },
         {
-          "label": "Opções disponíveis",
-          "entity": "opção",
+          "label": "Tillgängliga alternativ",
+          "entity": "alternativ",
           "field": {
-            "label": "Opção",
+            "label": "Alternativ",
             "fields": [
               {
-                "label": "Texto"
+                "label": "Text"
               },
               {
-                "label": "Próximo conteúdo (-1 é o ecrã final)"
+                "label": "Nästa innehåll (-1 betyder slutskärmen)"
               },
               {
                 "label": "Feedback",
                 "fields": [
                   {
-                    "label": "Título textual do Feedback"
+                    "label": "Feedback-titel"
                   },
                   {
-                    "label": "Texto do feedback"
+                    "label": "Feedback-text"
                   },
                   {
-                    "label": "Imagem do feedback"
+                    "label": "Feedback-bild"
                   }
                 ]
               }
