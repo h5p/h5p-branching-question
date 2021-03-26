@@ -104,5 +104,23 @@
         }
       }
     ]
+  },
+  {
+    "name": "behaviour",
+    "type": "group",
+    "label": "Behavioural settings",
+    "importance": "low",
+    "description": "These options will let you control how the game behaves.",
+    "optional": true,
+    "fields": [
+      {
+        "name": "enableTimer",
+        "type": "number",
+        "label": "Timed Question",
+        "description": "Gives user limited amount of time to answer question.",
+        "optional": true,
+        "default": 1
+      }
+    ]
   }
 ]

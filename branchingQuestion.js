@@ -1,12 +1,16 @@
-H5P.BranchingQuestion = (function () {
+H5P.BranchingQuestion = (function ($) {
 
   function BranchingQuestion(parameters) {
+    console.log(parameters);
     var self = this;
     self.firstFocusable;
     self.lastFocusable;
     H5P.EventDispatcher.call(self);
     this.container = null;
     let answered;
+    this.initialTime = parameters.behaviour;
+    this.timeRemaining = this.initialTime;
+    this.started = false;
 
     /**
      * Get closest ancestor of DOM element that matches selector.
@@ -47,6 +51,21 @@ H5P.BranchingQuestion = (function () {
 
       return wrapper;
     };
+
+    var appendTimer = (wrapper) => {
+      console.log(parameters.behaviour);
+      var timerWrapper = document.createElement('div');
+      timerWrapper.classList.add('h5p-timer-wrapper');
+
+      var canvas = document.createElement('canvas');
+      canvas.classList.add('h5p-timer-canvas');
+      updateCanvas(canvas, this.timeRemaining, this.initialTime);
+
+      timerWrapper.append(canvas);
+      wrapper.appendChild(timerWrapper);
+
+      return wrapper;
+    }
 
     var appendMultiChoiceSection = function (parameters, wrapper) {
       var questionWrapper = document.createElement('div');
@@ -318,6 +337,47 @@ H5P.BranchingQuestion = (function () {
     /**
      * TODO
      */
+    const updateCanvas = function(canvas, initialTime, timeRemaining) {
+      const totalLength = (2 * Math.PI) * 0.75;
+      const percentComplete = 1 - timeRemaining / initialTime;
+      const context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      // context.width = 400;
+      // context.height = 400;
+      context.save();
+      context.fillStyle = 'black';
+      context.font = "15px monaco";
+      context.textAlign = "center";
+      context.fillText(`${Math.ceil(timeRemaining)}s`, 150, 75);
+      context.translate(150, 75);
+      context.rotate(Math.PI * 0.75);
+      context.translate(-150, -75);
+      context.strokeStyle = "green";
+      context.beginPath();
+      context.arc(150, 75, 50, totalLength * percentComplete, totalLength);
+      context.lineWidth = 50;
+      context.stroke();
+      context.strokeStyle = "gray";
+      context.beginPath();
+      context.arc(150, 75, 50, 0, totalLength * percentComplete);
+      context.stroke();
+      context.restore();
+      // context.rotate(-Math.PI * 0.75);
+    }
+
+    self.on("domChanged", (e) => {
+      if (e.data.$target[0].className === "h5p-branching-question-wrapper" && !this.started) {
+        this.started = true;
+        const timerInterval = setInterval(() => {
+          const canvas = document.querySelector('canvas');
+          updateCanvas(canvas, this.initialTime, parseFloat(this.timeRemaining.toFixed(1)));
+          console.log(this.timeRemaining.toFixed(1));
+          if (this.timeRemaining.toFixed(1) === "0.0") clearInterval(timerInterval);
+          this.timeRemaining -= .1;
+        }, 100);
+      }
+    });
+
     self.attach = function ($container) {
       // Disable back button of underlying library screen
       self.parent.disableBackButton();
@@ -329,7 +389,11 @@ H5P.BranchingQuestion = (function () {
       branchingQuestion = appendMultiChoiceSection(parameters, branchingQuestion);
       trapFocus(branchingQuestion);
 
+      var timer = createWrapper(parameters);
+      timer = appendTimer(timer);
+
       questionContainer.appendChild(branchingQuestion);
+      questionContainer.appendChild(timer);
       $container.append(questionContainer);
       this.container = $container[0];
     };
@@ -337,4 +401,5 @@ H5P.BranchingQuestion = (function () {
 
   return BranchingQuestion;
 
-})();
+})(H5P.jQuery);
+// H5P.jquery
