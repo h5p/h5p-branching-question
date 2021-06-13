@@ -1,14 +1,14 @@
 {
   "semantics": [
     {
-      "label": "Editor de Pregunta Ramificada",
+      "label": "Editor de Preguntas Ramificadas",
       "fields": [
         {
           "label": "Pregunta"
         },
         {
-          "label": "Alternativas disponibles",
-          "entity": "alternativa",
+          "label": "Alternativas dispoñibles",
+          "entity": "alternativas",
           "field": {
             "label": "Alternativa",
             "fields": [
@@ -16,19 +16,19 @@
                 "label": "Texto"
               },
               {
-                "label": "Contenido Siguiente (-1 es la pantalla final)"
+                "label": "Seguinte Contido (-1 é a pantalla final)"
               },
               {
                 "label": "Retroalimentación",
                 "fields": [
                   {
-                    "label": "Título de Retroalimentación"
+                    "label": "Título da retroalimentación"
                   },
                   {
-                    "label": "Texto de Retroalimentación"
+                    "label": "Texto da retroalimentación"
                   },
                   {
-                    "label": "Imagen de Retroalimentación"
+                    "label": "Imaxe da retroalimentación"
                   }
                 ]
               }

@@ -16,7 +16,7 @@
                 "label": "Texto"
               },
               {
-                "label": "Contenido Siguiente (-1 es pantalla final)"
+                "label": "Contenido Siguiente (-1 es la pantalla final)"
               },
               {
                 "label": "Retroalimentación",
