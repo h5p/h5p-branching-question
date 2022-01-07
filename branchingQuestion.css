@@ -43,6 +43,9 @@
   border-color: #cfcfd1;
   cursor: pointer;
   word-break: break-word;
+  width: 100%;
+  font-size: 16px;
+  line-height: 1.5em;
 }
 
 .h5p-branching-question-alternative:hover {

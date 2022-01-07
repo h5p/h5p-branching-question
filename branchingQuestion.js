@@ -146,7 +146,7 @@ H5P.BranchingQuestion = (function () {
     };
 
     var createAlternativeContainer = function (text) {
-      var wrapper = document.createElement('div');
+      var wrapper = document.createElement('button');
       wrapper.classList.add('h5p-branching-question-alternative');
       wrapper.tabIndex = 0;
 
