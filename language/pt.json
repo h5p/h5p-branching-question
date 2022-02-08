@@ -1,7 +1,7 @@
 {
   "semantics": [
     {
-      "label": "Editor perguntas com ramificação",
+      "label": "Editor de perguntas com ramificação",
       "fields": [
         {
           "label": "Pergunta"
@@ -22,7 +22,7 @@
                 "label": "Feedback",
                 "fields": [
                   {
-                    "label": "Título textual do Feedback"
+                    "label": "Título do Feedback"
                   },
                   {
                     "label": "Texto do feedback"
