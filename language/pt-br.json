@@ -1,14 +1,14 @@
 {
   "semantics": [
     {
-      "label": "Branching Question Editor",
+      "label": "Editor de Questões de Ramificação",
       "fields": [
         {
           "label": "Questão"
         },
         {
           "label": "Opções disponíveis",
-          "entity": "option",
+          "entity": "Opção",
           "field": {
             "label": "Opção",
             "fields": [
@@ -19,10 +19,10 @@
                 "label": "Próximo conteúdo (-1 é a tela final)"
               },
               {
-                "label": "Feedback",
+                "label": "Feedback (Retorno)",
                 "fields": [
                   {
-                    "label": "Título textual do Feedback"
+                    "label": "Título do Feedback"
                   },
                   {
                     "label": "Texto do feedback"
