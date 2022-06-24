@@ -308,9 +308,13 @@ H5P.BranchingQuestion = (function () {
         // For this library, a user can only select a single alternative
         // (unlike in a multiple choice question where you can pick several
         // answers at once)
-        definition.correctResponsesPattern = alternativesWithScore.map(function (alternative, index) {
-          return index;
-        });
+        definition.correctResponsesPattern = alternativesWithScore
+          .filter(function (alternative) {
+            return alternative.feedback.endScreenScore === highestScoreAttainable;
+          })
+          .map(function (alternative, index) {
+            return index;
+          });
 
         // Use an extension in order to provide the points awarded by each alternative
         const extensionKey = 'https://h5p.org/x-api/alternatives-with-score';
