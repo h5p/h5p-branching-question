@@ -276,6 +276,11 @@ H5P.BranchingQuestion = (function () {
         'https://h5p.org/x-api/no-correct-answer': 1
       };
 
+      // Alternatives with the highest score are considered to be correct
+      // (and more than one can be correct if they award the same score)
+      let highestScoreAttainable = 0;
+
+      const alternativesWithScore = [];
       const alternatives = parameters.branchingQuestion.alternatives;
       for (let i = 0; i < alternatives.length; i++) {
         converter.innerHTML = alternatives[i].text;
@@ -285,6 +290,35 @@ H5P.BranchingQuestion = (function () {
             'en-US': converter.innerText
           }
         };
+
+        const scoreAwardedForThisAlternative = alternatives[i].feedback.endScreenScore;
+
+        if (typeof scoreAwardedForThisAlternative === 'number') {
+          alternativesWithScore.push(alternatives[i]);
+          highestScoreAttainable = Math.max(
+            highestScoreAttainable,
+            scoreAwardedForThisAlternative
+          );
+        }
+      }
+
+      if (alternativesWithScore.length > 0) {
+        // See https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#correct-responses-pattern
+        // An array where each element represents a correct response pattern.
+        // For this library, a user can only select a single alternative
+        // (unlike in a multiple choice question where you can pick several
+        // answers at once)
+        definition.correctResponsesPattern = alternativesWithScore.map(function (alternative, index) {
+          return index;
+        });
+
+        // Use an extension in order to provide the points awarded by each alternative
+        const extensionKey = 'https://h5p.org/x-api/alternatives-with-score';
+        definition.extensions[extensionKey] = {};
+
+        alternativesWithScore.forEach(function (alternative, index) {
+          definition.extensions[extensionKey][index] = alternative.feedback.endScreenScore;
+        });
       }
     };
 
