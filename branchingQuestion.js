@@ -142,14 +142,14 @@ H5P.BranchingQuestion = (function () {
       });
 
       if (parameters.branchingQuestion.randomize && !questionWrapper.dataset.shuffled) {
-        // "Shuffle" the alternatives by looping over each one, and then with a
-        // 50% chance move the current alternative to the bottom of the wrapper
+
         const alternatives = questionWrapper.querySelectorAll('button.h5p-branching-question-alternative');
-        for (let alternative of Array.from(alternatives)) {
-          if (Math.random() < 0.5) {
-            questionWrapper.appendChild(alternative);
-          }
-        }
+        const shuffledAlternatives = H5P.shuffleArray(Array.from(alternatives));
+
+        // Reorder the alternatives according to shuffledAlternatives
+        shuffledAlternatives.forEach(function (alternative) {
+          questionWrapper.appendChild(alternative);
+        });
 
         // Prevent shuffling more than once
         questionWrapper.setAttribute('data-shuffled', true);
