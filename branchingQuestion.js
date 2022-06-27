@@ -60,7 +60,7 @@ H5P.BranchingQuestion = (function () {
 
       const alternatives = parameters.branchingQuestion.alternatives || [] ;
       alternatives.forEach(function (altParams, index, array) {
-        const alternative = createAlternativeContainer(altParams.text);
+        const alternative = createAlternativeContainer(altParams.text, index);
 
         if (index === 0) {
           self.firstFocusable = alternative;
@@ -114,7 +114,7 @@ H5P.BranchingQuestion = (function () {
             var index2;
             for (var i = 0; i < alts.length; i++) {
               if (alts[i] === currentAlt) {
-                index2 = i;
+                index2 = +alts[i].getAttribute('data-id');
                 break;
               }
             }
@@ -141,14 +141,29 @@ H5P.BranchingQuestion = (function () {
         questionWrapper.appendChild(alternative);
       });
 
+      if (parameters.branchingQuestion.randomize && !questionWrapper.dataset.shuffled) {
+
+        const alternatives = questionWrapper.querySelectorAll('button.h5p-branching-question-alternative');
+        const shuffledAlternatives = H5P.shuffleArray(Array.from(alternatives));
+
+        // Reorder the alternatives according to shuffledAlternatives
+        shuffledAlternatives.forEach(function (alternative) {
+          questionWrapper.appendChild(alternative);
+        });
+
+        // Prevent shuffling more than once
+        questionWrapper.setAttribute('data-shuffled', true);
+      }
+
       wrapper.appendChild(questionWrapper);
       return wrapper;
     };
 
-    var createAlternativeContainer = function (text) {
+    var createAlternativeContainer = function (text, id) {
       var wrapper = document.createElement('button');
       wrapper.classList.add('h5p-branching-question-alternative');
       wrapper.tabIndex = 0;
+      wrapper.setAttribute('data-id', id);
 
       var alternativeText = document.createElement('p');
       alternativeText.innerHTML = text;
