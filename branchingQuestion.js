@@ -323,6 +323,9 @@ H5P.BranchingQuestion = (function () {
         alternativesWithScore.forEach(function (alternative, index) {
           definition.extensions[extensionKey][index] = alternative.feedback.endScreenScore;
         });
+
+        // Remove extension that indicates there is no correct answer
+        delete definition.extensions['https://h5p.org/x-api/no-correct-answer'];
       }
     };
 
