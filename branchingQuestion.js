@@ -271,6 +271,48 @@ H5P.BranchingQuestion = (function () {
     };
 
     /**
+     * If the chosen answer contains feedback data, adds an extension to the
+     * provided extensions object, so that it can be included in reports.
+     *
+     * @param {object} extensions Existing object to use
+     */
+    var addFeedbackInfoExtension = function (extensions) {
+      const alternatives = parameters.branchingQuestion.alternatives;
+      const chosen = alternatives[answered];
+      const feedback = chosen.feedback;
+
+      if (!feedback.title && !feedback.subtitle && !feedback.image) {
+        return; // Nothing to add
+      }
+
+      const converter = document.createElement('div');
+
+      if (feedback.image) {
+        feedback.imageUrl = H5P.getPath(
+          feedback.image.path,
+          self.parent.contentId
+        );
+      }
+
+      if (feedback.title) {
+        converter.innerHTML = feedback.title;
+        feedback.title = converter.innerText.trim();
+      }
+
+      if (feedback.subtitle) {
+        converter.innerHTML = feedback.subtitle;
+        feedback.subtitle = converter.innerText.trim();
+      }
+
+      // Remove some properties to minimize size of JSON
+      delete feedback.endScreenScore;
+      delete feedback.image;
+
+      const key = 'https://h5p.org/x-api/branching-choice-feedback';
+      extensions[key] = feedback;
+    };
+
+    /**
      * Add the question to the given xAPIEvent
      *
      * @param {H5P.XAPIEvent} xAPIEvent
@@ -290,6 +332,8 @@ H5P.BranchingQuestion = (function () {
       definition.extensions = {
         'https://h5p.org/x-api/no-correct-answer': 1
       };
+
+      addFeedbackInfoExtension(definition.extensions);
 
       const alternatives = parameters.branchingQuestion.alternatives;
       for (let i = 0; i < alternatives.length; i++) {
