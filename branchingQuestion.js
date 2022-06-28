@@ -254,7 +254,6 @@ H5P.BranchingQuestion = (function () {
       xAPIEvent.setScoredResult(undefined, undefined, self, true);
       xAPIEvent.data.statement.result.response = answered;
       xAPIEvent.data.statement.result.timestamp = timestamp;
-      console.log(xAPIEvent.data.statement);
       return {
         statement: xAPIEvent.data.statement
       };
