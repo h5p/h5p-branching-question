@@ -104,7 +104,7 @@ H5P.BranchingQuestion = (function () {
             wrapper.innerHTML = '';
             wrapper.appendChild(this.feedbackScreen);
             answered = index;
-            timestamp = Date.now();
+            timestamp = new Date().toISOString();
             this.proceedButton.focus();
             self.triggerXAPI('interacted');
           }
@@ -121,7 +121,7 @@ H5P.BranchingQuestion = (function () {
               }
             }
             answered = index2;
-            timestamp = Date.now();
+            timestamp = new Date().toISOString();
 
             var nextScreen = {
               nextContentId: this.nextContentId,
@@ -268,7 +268,7 @@ H5P.BranchingQuestion = (function () {
       addQuestionToXAPI(xAPIEvent);
       xAPIEvent.setScoredResult(undefined, undefined, self, true);
       xAPIEvent.data.statement.result.response = answered;
-      xAPIEvent.data.statement.result.timestamp = timestamp;
+      xAPIEvent.data.statement.timestamp = timestamp;
       return {
         statement: xAPIEvent.data.statement
       };
