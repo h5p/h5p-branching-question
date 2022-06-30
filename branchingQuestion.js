@@ -366,7 +366,8 @@ H5P.BranchingQuestion = (function () {
         definition.correctResponsesPattern = scoreMap.get(maxScore);
 
         // Use an extension in order to provide the points awarded by each alternative
-        definition.extensions['https://h5p.org/x-api/alternatives-with-score'] = {};
+        const extensionKey = 'https://h5p.org/x-api/alternatives-with-score';
+        definition.extensions[extensionKey] = {};
         scoreMap.forEach((alternatives, score) => {
           alternatives.forEach(alternative => {
             definition.extensions[extensionKey][alternative] = score;
