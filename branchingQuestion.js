@@ -337,8 +337,6 @@ H5P.BranchingQuestion = (function () {
         'https://h5p.org/x-api/no-correct-answer': 1
       };
 
-      addFeedbackInfoExtension(definition.extensions);
-
       // Alternatives with the highest score are considered to be correct
       // (and more than one can be correct if they award the same score)
       let highestScoreAttainable = 0;
@@ -390,6 +388,8 @@ H5P.BranchingQuestion = (function () {
         // Remove extension that indicates there is no correct answer
         delete definition.extensions['https://h5p.org/x-api/no-correct-answer'];
       }
+
+      addFeedbackInfoExtension(definition.extensions);
     };
 
     /**
