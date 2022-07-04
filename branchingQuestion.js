@@ -317,6 +317,69 @@ H5P.BranchingQuestion = (function () {
     };
 
     /**
+     * Determine whether the Branching Scenario is using dynamic score.
+     *
+     * @return {boolean}
+     */
+    var contentIsUsingDynamicScore = function () {
+      return (
+        self.parent &&
+        self.parent.params &&
+        self.parent.params.scoringOptionGroup &&
+        self.parent.params.scoringOptionGroup.scoringOption === 'dynamic-score'
+      );
+    };
+
+    /**
+     * If applicable, adds scoring and correctness information to the xAPI
+     * statement for use in reports.
+     *
+     * @param {object} definition xAPI object definition
+     * @param {array} alternatives Available branching choices
+     */
+    var addScoringAndCorrectness = function (definition, alternatives) {
+      // Only include scoring and correctness data for dynamic score option
+      if (!contentIsUsingDynamicScore()) {
+        return;
+      }
+
+      // Track each possible score and the alternatives that award it
+      const scoreMap = new Map();
+
+      for (let i = 0; i < alternatives.length; i++) {
+        const currentScore = alternatives[i].feedback.endScreenScore;
+
+        if (typeof currentScore === 'number' && currentScore > 0) {
+          if (scoreMap.has(currentScore)) {
+            scoreMap.get(currentScore).push(i);
+          }
+          else {
+            scoreMap.set(currentScore, [i]);
+          }
+        }
+      }
+
+      if (scoreMap.size > 0) {
+        // All alternatives that give the max score are considered correct
+        // See https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#correct-responses-pattern
+        const maxScore = Math.max(...scoreMap.keys());
+        definition.correctResponsesPattern = scoreMap.get(maxScore);
+
+        // Use an extension in order to provide the points awarded by each alternative
+        const extensionKey = 'https://h5p.org/x-api/alternatives-with-score';
+        definition.extensions[extensionKey] = {};
+        scoreMap.forEach((alternatives, score) => {
+          alternatives.forEach(alternative => {
+            definition.extensions[extensionKey][alternative] = score;
+          });
+        });
+
+        // Remove extension that indicates there is no correct answer
+        delete definition.extensions['https://h5p.org/x-api/no-correct-answer'];
+      }
+    };
+
+    /**
      * Add the question to the given xAPIEvent
      *
      * @param {H5P.XAPIEvent} xAPIEvent
@@ -337,11 +400,6 @@ H5P.BranchingQuestion = (function () {
         'https://h5p.org/x-api/no-correct-answer': 1
       };
 
-      // Alternatives with the highest score are considered to be correct
-      // (and more than one can be correct if they award the same score)
-      let highestScoreAttainable = 0;
-
-      const alternativesWithScore = [];
       const alternatives = parameters.branchingQuestion.alternatives;
       for (let i = 0; i < alternatives.length; i++) {
         converter.innerHTML = alternatives[i].text;
@@ -351,44 +409,9 @@ H5P.BranchingQuestion = (function () {
             'en-US': converter.innerText
           }
         };
-
-        const scoreAwardedForThisAlternative = alternatives[i].feedback.endScreenScore;
-
-        if (typeof scoreAwardedForThisAlternative === 'number') {
-          alternativesWithScore.push(alternatives[i]);
-          highestScoreAttainable = Math.max(
-            highestScoreAttainable,
-            scoreAwardedForThisAlternative
-          );
-        }
       }
 
-      if (alternativesWithScore.length > 0) {
-        // See https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#correct-responses-pattern
-        // An array where each element represents a correct response pattern.
-        // For this library, a user can only select a single alternative
-        // (unlike in a multiple choice question where you can pick several
-        // answers at once)
-        definition.correctResponsesPattern = alternativesWithScore
-          .filter(function (alternative) {
-            return alternative.feedback.endScreenScore === highestScoreAttainable;
-          })
-          .map(function (alternative, index) {
-            return index;
-          });
-
-        // Use an extension in order to provide the points awarded by each alternative
-        const extensionKey = 'https://h5p.org/x-api/alternatives-with-score';
-        definition.extensions[extensionKey] = {};
-
-        alternativesWithScore.forEach(function (alternative, index) {
-          definition.extensions[extensionKey][index] = alternative.feedback.endScreenScore;
-        });
-
-        // Remove extension that indicates there is no correct answer
-        delete definition.extensions['https://h5p.org/x-api/no-correct-answer'];
-      }
-
+      addScoringAndCorrectness(definition, alternatives);
       addFeedbackInfoExtension(definition.extensions);
     };
 
