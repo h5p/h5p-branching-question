@@ -66,7 +66,7 @@ H5P.BranchingQuestion = (function () {
 
       close.addEventListener('keyup', function (event) {
         // Add support for space and enter
-        if (event.code === 'Enter' || event.code === ' ') {
+        if (event.code === 'Enter' || event.code === 'Space') {
           closeDialog();
         }
       });
