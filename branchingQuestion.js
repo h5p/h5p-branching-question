@@ -43,11 +43,65 @@ H5P.BranchingQuestion = (function () {
       var icon = document.createElement('img');
       icon.classList.add('h5p-branching-question-icon');
       icon.src = self.getLibraryFilePath('branching-question-icon.svg');
+      const close = createCloseElement();
 
       wrapper.appendChild(icon);
+      wrapper.appendChild(close);
 
       return wrapper;
     };
+
+    /**
+     * Create close element and register events
+     *
+     * @return {Element} close
+     */
+    const createCloseElement = function () {
+      const close = document.createElement('div');
+      close.classList.add('h5p-branching-question-close');
+      close.tabIndex = 0;
+      close.setAttribute('aria-label', H5P.t('close'));
+      close.setAttribute('type', 'button');
+      close.setAttribute('title', H5P.t('close'));
+
+      close.addEventListener('keyup', function (event) {
+        // Add support for space and enter
+        if (event.code === 'Enter' || event.code === ' ') {
+          closeDialog();
+        }
+      });
+
+      close.onclick = function (e) {
+        // Add clickevent
+        closeDialog();
+      };
+
+      return close;
+    };
+
+    /**
+     * Remove BQ and navigate back to its previous position
+     */
+    const closeDialog = function () {
+      const overlay = self.parent.libraryScreen.overlay;
+      if (overlay) {
+        // TODO: When does this code every run?!
+        overlay.remove();
+        self.parent.libraryScreen.overlay = undefined;
+        self.container.remove();
+        self.parent.libraryScreen.showBackgroundToReadspeaker();
+      }
+
+      // Restart the BS if BQ is one first position
+      if (self.parent.currentId === 0) {
+        self.parent.trigger('restarted');
+        return;
+      }
+      // Just navigate backward if BQ is not on first position
+      self.parent.trigger('navigated', {
+        reverse: true
+      });
+    }
 
     var appendMultiChoiceSection = function (parameters, wrapper) {
       var questionWrapper = document.createElement('div');
@@ -412,7 +466,9 @@ H5P.BranchingQuestion = (function () {
       }
 
       addScoringAndCorrectness(definition, alternatives);
-      addFeedbackInfoExtension(definition.extensions);
+      if (answered) {
+        addFeedbackInfoExtension(definition.extensions);
+      }
     };
 
     /**
@@ -421,6 +477,11 @@ H5P.BranchingQuestion = (function () {
     self.attach = function ($container) {
       var questionContainer = document.createElement('div');
       questionContainer.classList.add('h5p-branching-question-container');
+      questionContainer.addEventListener('keyup', function (event) {
+        if (event.code === 'Escape') {
+          closeDialog();
+        }
+      });
 
       var branchingQuestion = createWrapper(parameters);
       branchingQuestion = appendMultiChoiceSection(parameters, branchingQuestion);

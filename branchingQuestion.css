@@ -119,3 +119,15 @@
 .h5p-branching-question .h5p-feedback-content h2 {
   font-size: 1em;
 }
+
+.h5p-branching-question .h5p-branching-question-close{
+  cursor: pointer;
+  position: absolute;
+  right: 1em;
+  top: 0.5em;
+}
+.h5p-branching-question .h5p-branching-question-close:before {
+  font-family: 'H5PFontAwesome4';
+  content: "\f057";
+  color: #757575;
+}
