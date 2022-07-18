@@ -13,6 +13,7 @@
         "widget": "html",
         "label": "Question",
         "enterMode": "p",
+        "optional": true,
         "tags": [
           "strong",
           "em",

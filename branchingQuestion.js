@@ -55,7 +55,9 @@ H5P.BranchingQuestion = (function () {
 
       var title = document.createElement('div');
       title.classList.add('h5p-branching-question-title');
-      title.innerHTML = parameters.branchingQuestion.question;
+      if (parameters.branchingQuestion.question) {
+        title.innerHTML = parameters.branchingQuestion.question;
+      }
 
       questionWrapper.appendChild(title);
 
