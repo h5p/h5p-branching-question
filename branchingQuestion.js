@@ -4,6 +4,7 @@ H5P.BranchingQuestion = (function () {
     var self = this;
     self.firstFocusable;
     self.lastFocusable;
+    self.closeButton;
     H5P.EventDispatcher.call(self);
     this.container = null;
     let answered;
@@ -43,10 +44,10 @@ H5P.BranchingQuestion = (function () {
       var icon = document.createElement('img');
       icon.classList.add('h5p-branching-question-icon');
       icon.src = self.getLibraryFilePath('branching-question-icon.svg');
-      const close = createCloseElement();
+      self.closeButton = createCloseElement();
 
       wrapper.appendChild(icon);
-      wrapper.appendChild(close);
+      wrapper.appendChild(self.closeButton);
 
       return wrapper;
     };
@@ -57,11 +58,9 @@ H5P.BranchingQuestion = (function () {
      * @return {Element} close
      */
     const createCloseElement = function () {
-      const close = document.createElement('div');
+      const close = document.createElement('button');
       close.classList.add('h5p-branching-question-close');
-      close.tabIndex = 0;
       close.setAttribute('aria-label', H5P.t('close'));
-      close.setAttribute('type', 'button');
       close.setAttribute('title', H5P.t('close'));
 
       close.addEventListener('keyup', function (event) {
@@ -71,10 +70,10 @@ H5P.BranchingQuestion = (function () {
         }
       });
 
-      close.onclick = function (e) {
+      close.addEventListener('click', function (e) {
         // Add clickevent
         closeDialog();
-      };
+      });
 
       return close;
     };
@@ -85,7 +84,6 @@ H5P.BranchingQuestion = (function () {
     const closeDialog = function () {
       const overlay = self.parent.libraryScreen.overlay;
       if (overlay) {
-        // TODO: When does this code every run?!
         overlay.remove();
         self.parent.libraryScreen.overlay = undefined;
         self.container.remove();
@@ -300,12 +298,13 @@ H5P.BranchingQuestion = (function () {
           return;
         }
 
-        if (e.shiftKey && document.activeElement === self.firstFocusable) /* shift + tab */ {
+        if (e.shiftKey && document.activeElement === self.closeButton) /* shift + tab */ {
           self.lastFocusable.focus();
           e.preventDefault();
         }
-        else if (document.activeElement === self.lastFocusable) { /* tab */
-          self.firstFocusable.focus();
+        else if ((document.activeElement === self.lastFocusable && self.container.querySelector('.h5p-back-button') === null)
+          || document.activeElement === self.container.querySelector('.h5p-back-button')) { /* tab */
+          self.closeButton.focus();
           e.preventDefault();
         }
       });
