@@ -7,25 +7,25 @@
           "label": "Vraag"
         },
         {
-          "label": "Beschikbare opties",
-          "entity": "optie",
+          "label": "Beschikbare alternatieven",
+          "entity": "alternatief",
           "field": {
-            "label": "Optie",
+            "label": "Alternatief",
             "fields": [
               {
                 "label": "Tekst"
               },
               {
-                "label": "Volgende inhoud (-1 is schermeinde)"
+                "label": "Volgende inhoud (-1 is eindscherm)"
               },
               {
                 "label": "Feedback",
                 "fields": [
                   {
-                    "label": "Titel feedback tekst"
+                    "label": "Titel van feedbacktekst"
                   },
                   {
-                    "label": "Feedback tekst"
+                    "label": "Feedbacktekst"
                   },
                   {
                     "label": "Feedback afbeelding"

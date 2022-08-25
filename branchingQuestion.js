@@ -2,11 +2,12 @@ H5P.BranchingQuestion = (function () {
 
   function BranchingQuestion(parameters) {
     var self = this;
-    self.firstFocusable;
     self.lastFocusable;
+    self.closeButton;
     H5P.EventDispatcher.call(self);
     this.container = null;
     let answered;
+    let timestamp;
 
     /**
      * Get closest ancestor of DOM element that matches selector.
@@ -42,11 +43,59 @@ H5P.BranchingQuestion = (function () {
       var icon = document.createElement('img');
       icon.classList.add('h5p-branching-question-icon');
       icon.src = self.getLibraryFilePath('branching-question-icon.svg');
+      self.closeButton = createCloseElement();
 
       wrapper.appendChild(icon);
+      wrapper.appendChild(self.closeButton);
 
       return wrapper;
     };
+
+    /**
+     * Create close element and register events
+     *
+     * @return {Element} close
+     */
+    const createCloseElement = function () {
+      const close = document.createElement('button');
+      close.classList.add('h5p-branching-question-close');
+      close.setAttribute('aria-label', H5P.t('close'));
+      close.setAttribute('title', H5P.t('close'));
+
+      close.addEventListener('keyup', function (event) {
+        // Add support for space and enter
+        if (event.code === 'Enter' || event.code === 'Space') {
+          closeDialog();
+        }
+      });
+
+      close.addEventListener('click', closeDialog);
+
+      return close;
+    };
+
+    /**
+     * Remove BQ and navigate back to its previous position
+     */
+    const closeDialog = function () {
+      const overlay = self.parent.libraryScreen.overlay;
+      if (overlay) {
+        overlay.remove();
+        self.parent.libraryScreen.overlay = undefined;
+        self.container.remove();
+        self.parent.libraryScreen.showBackgroundToReadspeaker();
+      }
+
+      // Restart the BS if BQ is one first position
+      if (self.parent.currentId === 0) {
+        self.parent.trigger('restarted');
+        return;
+      }
+      // Just navigate backward if BQ is not on first position
+      self.parent.trigger('navigated', {
+        reverse: true
+      });
+    }
 
     var appendMultiChoiceSection = function (parameters, wrapper) {
       var questionWrapper = document.createElement('div');
@@ -54,17 +103,15 @@ H5P.BranchingQuestion = (function () {
 
       var title = document.createElement('div');
       title.classList.add('h5p-branching-question-title');
-      title.innerHTML = parameters.branchingQuestion.question;
+      if (parameters.branchingQuestion.question) {
+        title.innerHTML = parameters.branchingQuestion.question;
+      }
 
       questionWrapper.appendChild(title);
 
       const alternatives = parameters.branchingQuestion.alternatives || [] ;
       alternatives.forEach(function (altParams, index, array) {
-        const alternative = createAlternativeContainer(altParams.text);
-
-        if (index === 0) {
-          self.firstFocusable = alternative;
-        }
+        const alternative = createAlternativeContainer(altParams.text, index);
 
         if (index === array.length - 1) {
           self.lastFocusable = alternative;
@@ -103,6 +150,7 @@ H5P.BranchingQuestion = (function () {
             wrapper.innerHTML = '';
             wrapper.appendChild(this.feedbackScreen);
             answered = index;
+            timestamp = new Date().toISOString();
             this.proceedButton.focus();
             self.triggerXAPI('interacted');
           }
@@ -114,11 +162,12 @@ H5P.BranchingQuestion = (function () {
             var index2;
             for (var i = 0; i < alts.length; i++) {
               if (alts[i] === currentAlt) {
-                index2 = i;
+                index2 = +alts[i].getAttribute('data-id');
                 break;
               }
             }
             answered = index2;
+            timestamp = new Date().toISOString();
 
             var nextScreen = {
               nextContentId: this.nextContentId,
@@ -141,14 +190,29 @@ H5P.BranchingQuestion = (function () {
         questionWrapper.appendChild(alternative);
       });
 
+      if (parameters.branchingQuestion.randomize && !questionWrapper.dataset.shuffled) {
+
+        const alternatives = questionWrapper.querySelectorAll('button.h5p-branching-question-alternative');
+        const shuffledAlternatives = H5P.shuffleArray(Array.from(alternatives));
+
+        // Reorder the alternatives according to shuffledAlternatives
+        shuffledAlternatives.forEach(function (alternative) {
+          questionWrapper.appendChild(alternative);
+        });
+
+        // Prevent shuffling more than once
+        questionWrapper.setAttribute('data-shuffled', true);
+      }
+
       wrapper.appendChild(questionWrapper);
       return wrapper;
     };
 
-    var createAlternativeContainer = function (text) {
+    var createAlternativeContainer = function (text, id) {
       var wrapper = document.createElement('button');
       wrapper.classList.add('h5p-branching-question-alternative');
       wrapper.tabIndex = 0;
+      wrapper.setAttribute('data-id', id);
 
       var alternativeText = document.createElement('p');
       alternativeText.innerHTML = text;
@@ -228,12 +292,13 @@ H5P.BranchingQuestion = (function () {
           return;
         }
 
-        if (e.shiftKey && document.activeElement === self.firstFocusable) /* shift + tab */ {
+        if (e.shiftKey && document.activeElement === self.closeButton) /* shift + tab */ {
           self.lastFocusable.focus();
           e.preventDefault();
         }
-        else if (document.activeElement === self.lastFocusable) { /* tab */
-          self.firstFocusable.focus();
+        else if ((document.activeElement === self.lastFocusable && self.container.querySelector('.h5p-back-button') === null)
+          || document.activeElement === self.container.querySelector('.h5p-back-button')) { /* tab */
+          self.closeButton.focus();
           e.preventDefault();
         }
       });
@@ -250,9 +315,115 @@ H5P.BranchingQuestion = (function () {
       addQuestionToXAPI(xAPIEvent);
       xAPIEvent.setScoredResult(undefined, undefined, self, true);
       xAPIEvent.data.statement.result.response = answered;
+      xAPIEvent.data.statement.timestamp = timestamp;
       return {
         statement: xAPIEvent.data.statement
       };
+    };
+
+    /**
+     * If the chosen answer contains feedback data, adds an extension to the
+     * provided extensions object, so that it can be included in reports.
+     *
+     * @param {object} extensions Existing object to use
+     */
+    var addFeedbackInfoExtension = function (extensions) {
+      const alternatives = parameters.branchingQuestion.alternatives;
+      const chosen = alternatives[answered];
+      const feedback = chosen.feedback;
+
+      if (!feedback.title && !feedback.subtitle && !feedback.image) {
+        return; // Nothing to add
+      }
+
+      const converter = document.createElement('div');
+
+      if (feedback.image) {
+        feedback.imageUrl = H5P.getPath(
+          feedback.image.path,
+          self.parent.contentId
+        );
+      }
+
+      if (feedback.title) {
+        converter.innerHTML = feedback.title;
+        feedback.title = converter.innerText.trim();
+      }
+
+      if (feedback.subtitle) {
+        converter.innerHTML = feedback.subtitle;
+        feedback.subtitle = converter.innerText.trim();
+      }
+
+      // Remove some properties to minimize size of JSON
+      delete feedback.endScreenScore;
+      delete feedback.image;
+
+      const key = 'https://h5p.org/x-api/branching-choice-feedback';
+      extensions[key] = feedback;
+    };
+
+    /**
+     * Determine whether the Branching Scenario is using dynamic score.
+     *
+     * @return {boolean}
+     */
+    var contentIsUsingDynamicScore = function () {
+      return (
+        self.parent &&
+        self.parent.params &&
+        self.parent.params.scoringOptionGroup &&
+        self.parent.params.scoringOptionGroup.scoringOption === 'dynamic-score'
+      );
+    };
+
+    /**
+     * If applicable, adds scoring and correctness information to the xAPI
+     * statement for use in reports.
+     *
+     * @param {object} definition xAPI object definition
+     * @param {array} alternatives Available branching choices
+     */
+    var addScoringAndCorrectness = function (definition, alternatives) {
+      // Only include scoring and correctness data for dynamic score option
+      if (!contentIsUsingDynamicScore()) {
+        return;
+      }
+
+      // Track each possible score and the alternatives that award it
+      const scoreMap = new Map();
+
+      for (let i = 0; i < alternatives.length; i++) {
+        const currentScore = alternatives[i].feedback.endScreenScore;
+
+        if (typeof currentScore === 'number' && currentScore > 0) {
+          if (scoreMap.has(currentScore)) {
+            scoreMap.get(currentScore).push(i);
+          }
+          else {
+            scoreMap.set(currentScore, [i]);
+          }
+        }
+      }
+
+      if (scoreMap.size > 0) {
+        // All alternatives that give the max score are considered correct
+        // See https://github.com/adlnet/xAPI-Spec/blob/master/xAPI-Data.md#correct-responses-pattern
+        const maxScore = Math.max(...scoreMap.keys());
+        definition.correctResponsesPattern = scoreMap.get(maxScore);
+
+        // Use an extension in order to provide the points awarded by each alternative
+        const extensionKey = 'https://h5p.org/x-api/alternatives-with-score';
+        definition.extensions[extensionKey] = {};
+        scoreMap.forEach((alternatives, score) => {
+          alternatives.forEach(alternative => {
+            definition.extensions[extensionKey][alternative] = score;
+          });
+        });
+
+        // Remove extension that indicates there is no correct answer
+        delete definition.extensions['https://h5p.org/x-api/no-correct-answer'];
+      }
     };
 
     /**
@@ -286,6 +457,11 @@ H5P.BranchingQuestion = (function () {
           }
         };
       }
+
+      addScoringAndCorrectness(definition, alternatives);
+      if (answered) {
+        addFeedbackInfoExtension(definition.extensions);
+      }
     };
 
     /**
@@ -294,6 +470,11 @@ H5P.BranchingQuestion = (function () {
     self.attach = function ($container) {
       var questionContainer = document.createElement('div');
       questionContainer.classList.add('h5p-branching-question-container');
+      questionContainer.addEventListener('keyup', function (event) {
+        if (event.code === 'Escape') {
+          closeDialog();
+        }
+      });
 
       var branchingQuestion = createWrapper(parameters);
       branchingQuestion = appendMultiChoiceSection(parameters, branchingQuestion);
