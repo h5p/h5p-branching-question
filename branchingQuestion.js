@@ -336,10 +336,11 @@ H5P.BranchingQuestion = (function () {
         return; // Nothing to add
       }
 
+      const xapiFeedback = {};
       const converter = document.createElement('div');
 
       if (feedback.image) {
-        feedback.imageUrl = H5P.getPath(
+        xapiFeedback.imageUrl = H5P.getPath(
           feedback.image.path,
           self.parent.contentId
         );
@@ -347,20 +348,16 @@ H5P.BranchingQuestion = (function () {
 
       if (feedback.title) {
         converter.innerHTML = feedback.title;
-        feedback.title = converter.innerText.trim();
+        xapiFeedback.title = converter.innerText.trim();
       }
 
       if (feedback.subtitle) {
         converter.innerHTML = feedback.subtitle;
-        feedback.subtitle = converter.innerText.trim();
+        xapiFeedback.subtitle = converter.innerText.trim();
       }
 
-      // Remove some properties to minimize size of JSON
-      delete feedback.endScreenScore;
-      delete feedback.image;
-
       const key = 'https://h5p.org/x-api/branching-choice-feedback';
-      extensions[key] = feedback;
+      extensions[key] = xapiFeedback;
     };
 
     /**
@@ -459,7 +456,7 @@ H5P.BranchingQuestion = (function () {
       }
 
       addScoringAndCorrectness(definition, alternatives);
-      if (answered) {
+      if (answered !== undefined) {
         addFeedbackInfoExtension(definition.extensions);
       }
     };
