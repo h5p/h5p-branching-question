@@ -2,6 +2,7 @@ H5P.BranchingQuestion = (function () {
 
   function BranchingQuestion(parameters) {
     var self = this;
+    self.firstFocusable;
     self.lastFocusable;
     self.closeButton;
     H5P.EventDispatcher.call(self);
@@ -69,7 +70,10 @@ H5P.BranchingQuestion = (function () {
         }
       });
 
-      close.addEventListener('click', closeDialog);
+      close.addEventListener('click', function (e) {
+        // Add clickevent
+        closeDialog();
+      });
 
       return close;
     };
@@ -112,6 +116,10 @@ H5P.BranchingQuestion = (function () {
       const alternatives = parameters.branchingQuestion.alternatives || [] ;
       alternatives.forEach(function (altParams, index, array) {
         const alternative = createAlternativeContainer(altParams.text, index);
+
+        if (index === 0) {
+          self.firstFocusable = alternative;
+        }
 
         if (index === array.length - 1) {
           self.lastFocusable = alternative;
