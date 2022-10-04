@@ -2,8 +2,6 @@ H5P.BranchingQuestion = (function () {
 
   function BranchingQuestion(parameters) {
     var self = this;
-    self.firstFocusable;
-    self.lastFocusable;
     H5P.EventDispatcher.call(self);
     this.container = null;
     let answered;
@@ -64,15 +62,6 @@ H5P.BranchingQuestion = (function () {
       const alternatives = parameters.branchingQuestion.alternatives || [] ;
       alternatives.forEach(function (altParams, index, array) {
         const alternative = createAlternativeContainer(altParams.text, index);
-
-        if (index === 0) {
-          self.firstFocusable = alternative;
-        }
-
-        if (index === array.length - 1) {
-          self.lastFocusable = alternative;
-        }
-
         alternative.nextContentId = altParams.nextContentId;
 
         // Create feedback screen if it exists
@@ -236,27 +225,6 @@ H5P.BranchingQuestion = (function () {
       wrapper.appendChild(feedbackContent);
 
       return wrapper;
-    };
-
-    //https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
-    var trapFocus = function (element) {
-      var KEYCODE_TAB = 9;
-      element.addEventListener('keydown', function (e) {
-        var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
-
-        if (!isTabPressed) {
-          return;
-        }
-
-        if (e.shiftKey && document.activeElement === self.firstFocusable) /* shift + tab */ {
-          self.lastFocusable.focus();
-          e.preventDefault();
-        }
-        else if (document.activeElement === self.lastFocusable) { /* tab */
-          self.firstFocusable.focus();
-          e.preventDefault();
-        }
-      });
     };
 
     /**
@@ -425,7 +393,6 @@ H5P.BranchingQuestion = (function () {
 
       var branchingQuestion = createWrapper(parameters);
       branchingQuestion = appendMultiChoiceSection(parameters, branchingQuestion);
-      trapFocus(branchingQuestion);
 
       questionContainer.appendChild(branchingQuestion);
       $container.append(questionContainer);
