@@ -213,15 +213,6 @@ H5P.BranchingQuestion = (function () {
 
       feedbackContent.appendChild(navButton);
 
-      var KEYCODE_TAB = 9;
-      feedbackContent.addEventListener('keydown', function (e) {
-        var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
-        if (isTabPressed) {
-          e.preventDefault();
-          return;
-        }
-      });
-
       wrapper.appendChild(feedbackContent);
 
       return wrapper;
