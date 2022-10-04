@@ -2,8 +2,6 @@ H5P.BranchingQuestion = (function () {
 
   function BranchingQuestion(parameters) {
     var self = this;
-    self.lastFocusable;
-    self.closeButton;
     H5P.EventDispatcher.call(self);
     this.container = null;
     let answered;
@@ -43,59 +41,11 @@ H5P.BranchingQuestion = (function () {
       var icon = document.createElement('img');
       icon.classList.add('h5p-branching-question-icon');
       icon.src = self.getLibraryFilePath('branching-question-icon.svg');
-      self.closeButton = createCloseElement();
 
       wrapper.appendChild(icon);
-      wrapper.appendChild(self.closeButton);
 
       return wrapper;
     };
-
-    /**
-     * Create close element and register events
-     *
-     * @return {Element} close
-     */
-    const createCloseElement = function () {
-      const close = document.createElement('button');
-      close.classList.add('h5p-branching-question-close');
-      close.setAttribute('aria-label', H5P.t('close'));
-      close.setAttribute('title', H5P.t('close'));
-
-      close.addEventListener('keyup', function (event) {
-        // Add support for space and enter
-        if (event.code === 'Enter' || event.code === 'Space') {
-          closeDialog();
-        }
-      });
-
-      close.addEventListener('click', closeDialog);
-
-      return close;
-    };
-
-    /**
-     * Remove BQ and navigate back to its previous position
-     */
-    const closeDialog = function () {
-      const overlay = self.parent.libraryScreen.overlay;
-      if (overlay) {
-        overlay.remove();
-        self.parent.libraryScreen.overlay = undefined;
-        self.container.remove();
-        self.parent.libraryScreen.showBackgroundToReadspeaker();
-      }
-
-      // Restart the BS if BQ is one first position
-      if (self.parent.currentId === 0) {
-        self.parent.trigger('restarted');
-        return;
-      }
-      // Just navigate backward if BQ is not on first position
-      self.parent.trigger('navigated', {
-        reverse: true
-      });
-    }
 
     var appendMultiChoiceSection = function (parameters, wrapper) {
       var questionWrapper = document.createElement('div');
@@ -112,11 +62,6 @@ H5P.BranchingQuestion = (function () {
       const alternatives = parameters.branchingQuestion.alternatives || [] ;
       alternatives.forEach(function (altParams, index, array) {
         const alternative = createAlternativeContainer(altParams.text, index);
-
-        if (index === array.length - 1) {
-          self.lastFocusable = alternative;
-        }
-
         alternative.nextContentId = altParams.nextContentId;
 
         // Create feedback screen if it exists
@@ -268,40 +213,9 @@ H5P.BranchingQuestion = (function () {
 
       feedbackContent.appendChild(navButton);
 
-      var KEYCODE_TAB = 9;
-      feedbackContent.addEventListener('keydown', function (e) {
-        var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
-        if (isTabPressed) {
-          e.preventDefault();
-          return;
-        }
-      });
-
       wrapper.appendChild(feedbackContent);
 
       return wrapper;
-    };
-
-    //https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
-    var trapFocus = function (element) {
-      var KEYCODE_TAB = 9;
-      element.addEventListener('keydown', function (e) {
-        var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
-
-        if (!isTabPressed) {
-          return;
-        }
-
-        if (e.shiftKey && document.activeElement === self.closeButton) /* shift + tab */ {
-          self.lastFocusable.focus();
-          e.preventDefault();
-        }
-        else if ((document.activeElement === self.lastFocusable && self.container.querySelector('.h5p-back-button') === null)
-          || document.activeElement === self.container.querySelector('.h5p-back-button')) { /* tab */
-          self.closeButton.focus();
-          e.preventDefault();
-        }
-      });
     };
 
     /**
@@ -467,15 +381,9 @@ H5P.BranchingQuestion = (function () {
     self.attach = function ($container) {
       var questionContainer = document.createElement('div');
       questionContainer.classList.add('h5p-branching-question-container');
-      questionContainer.addEventListener('keyup', function (event) {
-        if (event.code === 'Escape') {
-          closeDialog();
-        }
-      });
 
       var branchingQuestion = createWrapper(parameters);
       branchingQuestion = appendMultiChoiceSection(parameters, branchingQuestion);
-      trapFocus(branchingQuestion);
 
       questionContainer.appendChild(branchingQuestion);
       $container.append(questionContainer);
