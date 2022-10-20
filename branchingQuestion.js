@@ -94,6 +94,7 @@ H5P.BranchingQuestion = (function () {
             }
             wrapper.innerHTML = '';
             wrapper.appendChild(this.feedbackScreen);
+            self.parent.trigger('resize');
             answered = index;
             timestamp = new Date().toISOString();
             this.proceedButton.focus();
