@@ -94,8 +94,17 @@ H5P.BranchingQuestion = (function () {
             }
             wrapper.innerHTML = '';
             wrapper.appendChild(this.feedbackScreen);
+            self.parent.trigger('resize');
             answered = index;
             timestamp = new Date().toISOString();
+            const container = document.querySelector('.h5p-branching-question-container');
+            if (container.hasAttribute('role')) {
+              container.removeAttribute('role');
+              container.removeAttribute('aria-labelledby');
+            }
+            this.feedbackScreen.setAttribute('role', 'dialog');
+            this.feedbackScreen.setAttribute('aria-labelledby', 'h5p-feedback-content-title');
+            this.feedbackScreen.setAttribute('aria-describedby', 'h5p-feedback-content-content');
             this.proceedButton.focus();
             self.triggerXAPI('interacted');
           }
@@ -192,10 +201,12 @@ H5P.BranchingQuestion = (function () {
 
       var title = document.createElement('h1');
       title.innerHTML = feedback.title || '';
+      title.id = 'h5p-feedback-content-title';
       feedbackText.appendChild(title);
 
       if (feedback.subtitle) {
         var subtitle = document.createElement('div');
+        subtitle.id = 'h5p-feedback-content-content';
         subtitle.innerHTML = feedback.subtitle || '';
         feedbackText.appendChild(subtitle);
       }
