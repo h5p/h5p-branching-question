@@ -22,7 +22,7 @@
                 "label": "Retroalimentación",
                 "fields": [
                   {
-                    "label": "Título de Retroalimentación"
+                    "label": "Título de la retroalimentación"
                   },
                   {
                     "label": "Texto de Retroalimentación"
