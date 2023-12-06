@@ -4,6 +4,15 @@
       "label": "Editeur de question de branchement",
       "fields": [
         {
+          "label": "Média",
+          "fields": [
+            {
+              "label": "Type",
+              "description": "Média à afficher au-dessus de la question (facultatif)."
+            }
+          ]
+        },
+        {
           "label": "Question"
         },
         {

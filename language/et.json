@@ -4,6 +4,15 @@
       "label": "Hargneva küsimuse redaktor",
       "fields": [
         {
+          "label": "Meedia",
+          "fields": [
+            {
+              "label": "Tüüp",
+              "description": "Pilt või video küsimuse juures kuvamiseks (ei ole kohustuslik)."
+            }
+          ]
+        },
+        {
           "label": "Küsimus"
         },
         {
