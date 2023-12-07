@@ -1,7 +1,17 @@
 {
   "semantics": [
     {
+      "label": "Mhariri wa Maswali ya Tawi",
       "fields": [
+        {
+          "label": "Vyombo vya habari",
+          "fields": [
+            {
+              "label": "Aina",
+              "description": "Vyombo vya habari vya hiari vya kuonyesha juu ya swali."
+            }
+          ]
+        },
         {
           "label": "Swali"
         },
@@ -34,8 +44,7 @@
           },
           "label": "Njia mbadala zinazopatikana"
         }
-      ],
-      "label": "Mhariri wa Maswali ya Tawi"
+      ]
     }
   ]
 }

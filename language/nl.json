@@ -4,6 +4,15 @@
       "label": "Branching Question Editor",
       "fields": [
         {
+          "label": "Media",
+          "fields": [
+            {
+              "label": "Type",
+              "description": "Optionele media, die boven de vraag wordt getoond."
+            }
+          ]
+        },
+        {
           "label": "Vraag"
         },
         {

@@ -4,6 +4,15 @@
       "label": "Editor di Branching Question",
       "fields": [
         {
+          "label": "Media",
+          "fields": [
+            {
+              "label": "Tipo",
+              "description": "Media facoltativo da mostrare sopra la domanda"
+            }
+          ]
+        },
+        {
           "label": "Domanda"
         },
         {

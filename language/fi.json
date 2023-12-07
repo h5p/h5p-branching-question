@@ -4,6 +4,15 @@
       "label": "Haarutuvan Kysymyksen Editori",
       "fields": [
         {
+          "label": "Media",
+          "fields": [
+            {
+              "label": "Tyyppi",
+              "description": "Valinnainen kuva tai video, joka näkyy kysymyksen yläpuolella."
+            }
+          ]
+        },
+        {
           "label": "Kysymys"
         },
         {

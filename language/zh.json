@@ -4,6 +4,15 @@
       "label": "分叉式問題編輯器",
       "fields": [
         {
+          "label": "媒体",
+          "fields": [
+            {
+              "label": "类型",
+              "description": "用于显示该问题的可选媒体."
+            }
+          ]
+        },
+        {
           "label": "題目"
         },
         {

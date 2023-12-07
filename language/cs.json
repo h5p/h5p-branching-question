@@ -4,6 +4,15 @@
       "label": "Editor větvení otázek",
       "fields": [
         {
+          "label": "Média",
+          "fields": [
+            {
+              "label": "Typ",
+              "description": "Volitelná média zobrazená nad otázkou."
+            }
+          ]
+        },
+        {
           "label": "Otázka"
         },
         {

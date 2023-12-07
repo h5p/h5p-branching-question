@@ -4,6 +4,15 @@
       "label": "Redigerare för Branching Question",
       "fields": [
         {
+          "label": "Media",
+          "fields": [
+            {
+              "label": "Typ",
+              "description": "Valfri media att visa ovanför frågan."
+            }
+          ]
+        },
+        {
           "label": "Fråga"
         },
         {

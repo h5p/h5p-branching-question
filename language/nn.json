@@ -4,6 +4,15 @@
       "label": "Branching Question Editor",
       "fields": [
         {
+          "label": "Medieelement",
+          "fields": [
+            {
+              "label": "Type",
+              "description": "Valfritt medieelement. Elementet blir plassert over spørsmålet."
+            }
+          ]
+        },
+        {
           "label": "Spørsmål"
         },
         {

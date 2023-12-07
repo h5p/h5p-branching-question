@@ -1,7 +1,17 @@
 {
   "semantics": [
     {
+      "label": "Zarošanās jautājuma redaktors",
       "fields": [
+        {
+          "label": "Multivide",
+          "fields": [
+            {
+              "label": "Tips",
+              "description": "Papildu multimedijs, kuru atspoguļot virs jautājuma."
+            }
+          ]
+        },
         {
           "label": "Jautājums"
         },
@@ -34,8 +44,7 @@
             ]
           }
         }
-      ],
-      "label": "Zarošanās jautājuma redaktors"
+      ]
     }
   ]
 }

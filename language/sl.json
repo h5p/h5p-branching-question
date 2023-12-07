@@ -4,6 +4,15 @@
       "label": "Urejevalnik",
       "fields": [
         {
+          "label": "Mediji",
+          "fields": [
+            {
+              "label": "Tip",
+              "description": "Neobvezna nastavitev dodatnega medija za prikaz nad vprašanjem."
+            }
+          ]
+        },
+        {
           "label": "Vprašanje"
         },
         {
