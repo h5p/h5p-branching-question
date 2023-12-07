@@ -25,8 +25,9 @@
 
   display: flex;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem auto;
   max-height: var(--h5p-branching-question-media-max-height);
+  max-width: var(--h5p-branching-question-media-max-width);
 }
 
 .h5p-branching-question-media-instance.h5p-image img {
