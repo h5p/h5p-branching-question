@@ -118,7 +118,17 @@ H5P.BranchingQuestion = (function () {
          * @see https://github.com/h5p/h5p-audio/pull/48
          */
         if (machineName === 'H5P.Audio' && !!window.chrome) {
-          mediaInstance.audio.style.height = '54px';
+          if (mediaInstance.audio) {
+            mediaInstance.audio.style.height = '54px';
+          }
+
+          self.parent.trigger('resize');
+        }
+        else if (machineName === 'H5P.Image' || machineName === 'H5P.Video') {
+          mediaInstance.on('loaded', () => {
+            self.parent.trigger('resize');
+          });
+          self.parent.trigger('resize');
         }
 
         self.bubbleUp(mediaInstance, 'resize', self.parent);
