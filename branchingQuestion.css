@@ -21,7 +21,7 @@
 
 .h5p-branching-question-media-wrapper {
   --h5p-branching-question-media-max-height: 50%;
-  --h5p-branching-question-media-max-width: 50%;
+  --h5p-branching-question-media-max-width: 60%;
 
   display: flex;
   justify-content: center;
