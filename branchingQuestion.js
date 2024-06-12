@@ -1,9 +1,16 @@
 H5P.BranchingQuestion = (function () {
 
-  function BranchingQuestion(parameters) {
+  /**
+   * @param {object} parameters Parameters passed by the editor.
+   * @param {number} contentId Content's id.
+   * @param {object} [extras] Saved state, metadata, etc.
+   */
+  function BranchingQuestion(parameters, contentid, extras = {}) {
     var self = this;
     H5P.EventDispatcher.call(self);
     this.container = null;
+    self.alternativeDOMs = {};
+    let alternativesOrder = extras.previousState?.order ?? [];
     let answered;
     let timestamp;
 
@@ -98,7 +105,7 @@ H5P.BranchingQuestion = (function () {
             answered = index;
             timestamp = new Date().toISOString();
             const container = document.querySelector('.h5p-branching-question-container');
-            if (container.hasAttribute('role')) {
+            if (container?.hasAttribute('role')) {
               container.removeAttribute('role');
               container.removeAttribute('aria-labelledby');
             }
@@ -141,13 +148,34 @@ H5P.BranchingQuestion = (function () {
             self.trigger('navigated', nextScreen);
           }
         };
+
+        self.alternativeDOMs[index] = alternative;
         questionWrapper.appendChild(alternative);
       });
 
       if (parameters.branchingQuestion.randomize && !questionWrapper.dataset.shuffled) {
 
-        const alternatives = questionWrapper.querySelectorAll('button.h5p-branching-question-alternative');
-        const shuffledAlternatives = H5P.shuffleArray(Array.from(alternatives));
+        const alternatives = [...questionWrapper.querySelectorAll('button.h5p-branching-question-alternative')];
+        let shuffledAlternatives;
+        /*
+         * Within Branching Question, once the order of the alternatives has
+         * been randomized, it should remain the same until the Branching
+         * Scenario is restarted. That means the order must always be part of
+         * the state.
+         */
+        if (alternativesOrder.length) {
+          shuffledAlternatives = alternativesOrder.map((index) => {
+            return alternatives[index];
+          });
+        }
+        else {
+          // H5P.shuffleArray works in place, so we need to create a copy
+          shuffledAlternatives = H5P.shuffleArray([...alternatives]);
+
+          alternativesOrder = shuffledAlternatives.map((alternative) => {
+            return alternatives.indexOf(alternative);
+          });
+        }
 
         // Reorder the alternatives according to shuffledAlternatives
         shuffledAlternatives.forEach(function (alternative) {
@@ -390,15 +418,74 @@ H5P.BranchingQuestion = (function () {
      * TODO
      */
     self.attach = function ($container) {
-      var questionContainer = document.createElement('div');
-      questionContainer.classList.add('h5p-branching-question-container');
+      this.container = $container[0];
+
+      this.questionContainer = document.createElement('div');
+      this.questionContainer.classList.add('h5p-branching-question-container');
 
       var branchingQuestion = createWrapper(parameters);
       branchingQuestion = appendMultiChoiceSection(parameters, branchingQuestion);
+      this.questionContainer.appendChild(branchingQuestion);
 
-      questionContainer.appendChild(branchingQuestion);
-      $container.append(questionContainer);
-      this.container = $container[0];
+      this.container.append(this.questionContainer);
+
+      if (typeof extras.previousState?.answered === 'number') {
+        /*
+         * Using click() as a cheap way of recreating the feedback without
+         * having to refactor large parts of the code.
+         */
+        window.requestAnimationFrame(() => {
+          self.alternativeDOMs[extras.previousState.answered]?.click();
+        });
+      }
+    };
+
+    /**
+     * Reset task.
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-5}
+     */
+    self.resetTask = function () {
+      answered = undefined;
+      timestamp = undefined;
+      delete extras.previousState;
+
+      /*
+       * Remove feedback dialog if it exists and reset the container.
+       * Note that resetting will remove the "Back" button that was injected by
+       * Branching Scenario and will need to be re-created there if it
+       * gets necessary.
+       */
+      if (
+        self.container.classList
+          .contains('h5p-branching-scenario-feedback-dialog')
+      ) {
+        self.container.classList
+          .remove('h5p-branching-scenario-feedback-dialog');
+        self.container.innerHTML = '';
+        self.attach(H5P.jQuery(self.container));
+      }
+    };
+
+    /**
+     * Get current state.
+     * @returns {object} Current state to be retrieved later.
+     * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-7}
+     */
+    self.getCurrentState = () => {
+      /*
+       * A content type should normally not return a state if the user has
+       * not interacted with the content type yet. However, the order of the
+       * answer options should remain the same until the Branching Scenario
+       * is restarted. That means the order must always be part of the state.
+       * Since the Branching Question is only used in the Branching Scenario,
+       * we can safely return the state even if the user has not interacted to
+       * prevent adding more complexity to Branching Scenario for keeping track
+       * of the order and for restoring it here.
+       */
+      return {
+        order: alternativesOrder,
+        answered: answered
+      };
     };
   }
 
