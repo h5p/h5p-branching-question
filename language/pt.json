@@ -4,6 +4,15 @@
       "label": "Editor de perguntas com ramificação",
       "fields": [
         {
+          "label": "Mídia",
+          "fields": [
+            {
+              "label": "Tipo",
+              "description": "Mídia opcional para exibir acima da pergunta."
+            }
+          ]
+        },
+        {
           "label": "Pergunta"
         },
         {

@@ -4,6 +4,15 @@
       "label": "Aukerako Erantzunen Editorea",
       "fields": [
         {
+          "label": "Multimedia",
+          "fields": [
+            {
+              "label": "Mota",
+              "description": "Galderaren gainean bistaratzeko aukerako multimedia."
+            }
+          ]
+        },
+        {
           "label": "Erantzuna"
         },
         {

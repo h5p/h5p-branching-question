@@ -54,9 +54,116 @@ H5P.BranchingQuestion = (function () {
       return wrapper;
     };
 
+    /**
+     * Call callback once when element gets visible in DOM.
+     * @param {HTMLElement} element Element to observe.
+     * @param {function} callback Callback to call when element gets visible.
+     */
+    const callWhenVisible = (element, callback = () => {}) => {
+      if (!element) {
+        return;
+      }
+
+      // requestIdleCallback can help when content is embedded, but iOS doesn't support it before 18.0
+      const requestCallback = window.requestIdleCallback ??
+        window.requestAnimationFrame;
+
+      requestCallback(() => {
+        const observer = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            observer.unobserve(element);
+            observer.disconnect();
+            callback();
+          }
+        }, {
+          root: document.documentElement,
+          threshold: 0.1
+        });
+        observer.observe(element);
+      });
+    }
+
+    /**
+     * Add media to question.
+     * @param {object} media Media object from semantics.
+     * @param {HTMLElement} mediaWrapper Wrapping element to add media to.
+     */
+    const addMedia = function (media, mediaWrapper) {
+      const machineName = media.library.split(' ')[0];
+
+      // Parameter overrides for media types
+      if (machineName === 'H5P.Video') {
+        media.params.visuals.fit = (
+          media.params.sources?.length && (
+            media.params.sources[0].mime === 'video/mp4' ||
+            media.params.sources[0].mime === 'video/webm' ||
+            media.params.sources[0].mime === 'video/ogg'
+          )
+        );
+      }
+      else if (machineName === 'H5P.Audio') {
+        media.params.playerMode = 'full';
+        media.params.fitToWrapper = true;
+        media.params.controls = true;
+      }
+
+      // DOM element that will contain the media instance
+      const mediaInstanceDOM = document.createElement('div');
+      mediaInstanceDOM.classList.add('h5p-branching-question-media-instance');
+      mediaWrapper.append(mediaInstanceDOM);
+
+      const mediaInstance = H5P.newRunnable(
+        parameters.branchingQuestion.media,
+        self.parent.contentId,
+        H5P.jQuery(mediaInstanceDOM),
+        true
+      );
+
+      if (mediaInstance) {
+        /*
+         * Workaround, as not fixed upstream
+         * @see https://github.com/h5p/h5p-audio/pull/48
+         */
+        if (machineName === 'H5P.Audio' && !!window.chrome) {
+          if (mediaInstance.audio) {
+            mediaInstance.audio.style.height = '54px';
+          }
+
+          self.parent.trigger('resize');
+        }
+        else if (machineName === 'H5P.Image' || machineName === 'H5P.Video') {
+          mediaInstance.on('loaded', () => {
+            self.parent.trigger('resize');
+          });
+          self.parent.trigger('resize');
+        }
+
+        self.bubbleUp(mediaInstance, 'resize', self.parent);
+        self.bubbleDown(self.parent, 'resize', [mediaInstance]);
+      }
+    }
+
     var appendMultiChoiceSection = function (parameters, wrapper) {
       var questionWrapper = document.createElement('div');
       questionWrapper.classList.add('h5p-multichoice-wrapper');
+
+      // Add media if set
+      const media = parameters.branchingQuestion.media;
+
+      if (media?.library && media?.params) {
+        const mediaWrapper = document.createElement('div');
+        mediaWrapper.classList.add('h5p-branching-question-media-wrapper');
+
+        /*
+         * Get started once visible and ready. At least YouTube requires
+         * container to be visible before loading.
+         */
+        callWhenVisible(mediaWrapper, () => {
+          addMedia(media, mediaWrapper);
+        });
+
+        questionWrapper.append(mediaWrapper);
+      }
 
       var title = document.createElement('div');
       title.classList.add('h5p-branching-question-title');
@@ -487,6 +594,44 @@ H5P.BranchingQuestion = (function () {
         answered: answered
       };
     };
+
+    /**
+     * Make it easy to bubble events from child to parent.
+     * @param {object} origin Origin of event.
+     * @param {string} eventName Name of event.
+     * @param {object} target Target to trigger event on.
+     */
+    self.bubbleUp = (origin, eventName, target) => {
+      origin.on(eventName, (event) => {
+        // Prevent target from sending event back down
+        target.bubblingUpwards = true;
+
+        // Trigger event
+        target.trigger(eventName, event);
+
+        // Reset
+        target.bubblingUpwards = false;
+      });
+    };
+
+    /**
+     * Make it easy to bubble events from parent to children.
+     * @param {object} origin Origin of event.
+     * @param {string} eventName Name of event.
+     * @param {object[]} targets Targets to trigger event on.
+     */
+    self.bubbleDown = (origin, eventName, targets) => {
+      origin.on(eventName, (event) => {
+        if (origin.bubblingUpwards) {
+          return; // Prevent send event back down.
+        }
+
+        targets.forEach((target) => {
+          target.trigger(eventName, event);
+        });
+      });
+    };
+
   }
 
   return BranchingQuestion;
