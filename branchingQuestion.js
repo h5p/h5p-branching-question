@@ -394,7 +394,8 @@ H5P.BranchingQuestion = (function () {
       definition.correctResponsesPattern = [];
       definition.choices = [];
       definition.extensions = {
-        'https://h5p.org/x-api/no-correct-answer': 1
+        'https://h5p.org/x-api/no-correct-answer': 1,
+        'http://h5p.org/x-api/h5p-subContentId': self.subContentId
       };
 
       const alternatives = parameters.branchingQuestion.alternatives;
