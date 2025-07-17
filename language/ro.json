@@ -1,0 +1,41 @@
+{
+  "semantics": [
+    {
+      "label": "Editor de Întrebări cu Ramificare",
+      "fields": [
+        {
+          "label": "Întrebare"
+        },
+        {
+          "label": "Alternative disponibile",
+          "entity": "alternativă",
+          "field": {
+            "label": "Alternativă",
+            "fields": [
+              {
+                "label": "Text"
+              },
+              {
+                "label": "Conținutul următor (-1 este ecranul de final)"
+              },
+              {
+                "label": "Feedback",
+                "fields": [
+                  {
+                    "label": "Titlu feedback"
+                  },
+                  {
+                    "label": "Text feedback"
+                  },
+                  {
+                    "label": "Imagine feedback"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
