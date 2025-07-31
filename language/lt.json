@@ -1,7 +1,17 @@
 {
   "semantics": [
     {
+      "label": "Išsišakojusių klausimų redaktorius",
       "fields": [
+        {
+          "label": "Medija",
+          "fields": [
+            {
+              "label": "Tipas",
+              "description": "Pasirenkama medija, rodoma virš klausimo."
+            }
+          ]
+        },
         {
           "label": "Klausimas"
         },
@@ -34,8 +44,7 @@
           },
           "label": "Galimos alternatyvos"
         }
-      ],
-      "label": "Išsišakojusių klausimų redaktorius"
+      ]
     }
   ]
 }
