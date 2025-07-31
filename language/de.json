@@ -29,6 +29,10 @@
                   },
                   {
                     "label": "Bild für die Rückmeldung"
+                  },
+                  {
+                    "label": "Punkte für dieses Szenario",
+                    "description": "Die Punkte werden zum LMS, LRS oder einem anderen verbundenen Dienst geschickt, der Punkte von H5P-Nutzenden annimmt, die dieses Szenario erreichen."
                   }
                 ]
               }

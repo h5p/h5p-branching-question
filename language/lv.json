@@ -28,6 +28,10 @@
                   },
                   {
                     "label": "Atgriezeniskās saites attēls"
+                  },
+                  {
+                    "label": "Score for this scenario",
+                    "description": "The score will be sent to any LMS, LRS or any other connected service that receives scores from H5P for users who reach this scenario"
                   }
                 ]
               }
