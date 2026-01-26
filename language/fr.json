@@ -19,7 +19,7 @@
                 "label": "Contenu suivant (-1 correspond à l'écran de fin)"
               },
               {
-                "label": "Feedback",
+                "label": "Retour",
                 "fields": [
                   {
                     "label": "Titre du feedback"
@@ -29,6 +29,10 @@
                   },
                   {
                     "label": "Image du feedback"
+                  },
+                  {
+                    "label": "Score pour ce scénario",
+                    "description": "Le score sera envoyé à tout LMS, LRS ou autre service connecté qui reçoit des scores de H5P pour les utilisateurs qui atteignent ce scénario"
                   }
                 ]
               }
