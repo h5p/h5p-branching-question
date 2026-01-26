@@ -19,7 +19,7 @@
                 "label": "Contenu suivant (-1 correspond à l'écran de fin)"
               },
               {
-                "label": "Feedback",
+                "label": "Retour",
                 "fields": [
                   {
                     "label": "Titre du feedback"
