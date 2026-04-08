@@ -1,0 +1,41 @@
+{
+  "semantics": [
+    {
+      "label": "Penyunting Pertanyaan Bercabang",
+      "fields": [
+        {
+          "label": "Pertanyaan"
+        },
+        {
+          "label": "Alternatif tersedia",
+          "entity": "alternatif",
+          "field": {
+            "label": "Alternatif",
+            "fields": [
+              {
+                "label": "Teks"
+              },
+              {
+                "label": "Konten Selanjutnya (-1 adalah layar akhir)"
+              },
+              {
+                "label": "Umpan Balik",
+                "fields": [
+                  {
+                    "label": "Judul umpan balik"
+                  },
+                  {
+                    "label": "Teks umpan balik"
+                  },
+                  {
+                    "label": "Gambar umpan balik"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
