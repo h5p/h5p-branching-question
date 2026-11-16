@@ -1,0 +1,45 @@
+{
+  "semantics": [
+    {
+      "label": "Elágazó kérdés szerkesztője",
+      "fields": [
+        {
+          "label": "Kérdés"
+        },
+        {
+          "label": "Válaszlehetőségek",
+          "entity": "válaszlehetőség",
+          "field": {
+            "label": "Válaszlehetőség",
+            "fields": [
+              {
+                "label": "Szöveg"
+              },
+              {
+                "label": "Következő tartalom (a -1 a befejező képernyőt jelenti)"
+              },
+              {
+                "label": "Visszajelzés",
+                "fields": [
+                  {
+                    "label": "Visszajelzés címe"
+                  },
+                  {
+                    "label": "Visszajelzés szövege"
+                  },
+                  {
+                    "label": "Visszajelzés képe"
+                  },
+                  {
+                    "label": "Pontszám ehhez a befejezéshez",
+                    "description": "Az ehhez a befejezéshez eljutó felhasználók pontszámát a H5P elküldi minden olyan LMS-nek, LRS-nek vagy más kapcsolódó szolgáltatásnak, amely fogadja a H5P-től érkező pontszámokat."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
