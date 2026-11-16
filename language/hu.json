@@ -29,6 +29,10 @@
                   },
                   {
                     "label": "Visszajelzés képe"
+                  },
+                  {
+                    "label": "Pontszám ehhez a befejezéshez",
+                    "description": "Az ehhez a befejezéshez eljutó felhasználók pontszámát a H5P elküldi minden olyan LMS-nek, LRS-nek vagy más kapcsolódó szolgáltatásnak, amely fogadja a H5P-től érkező pontszámokat."
                   }
                 ]
               }
